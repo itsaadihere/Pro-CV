@@ -1,3 +1,8 @@
+// Polyfill DOMMatrix for PDFJS in Node.js serverless environments (Vercel)
+if (typeof globalThis.DOMMatrix === 'undefined') {
+  (globalThis as any).DOMMatrix = class DOMMatrix {}
+}
+
 import mammoth from 'mammoth'
 
 const { PDFParse } = require('pdf-parse')

@@ -9,41 +9,53 @@ import toast from 'react-hot-toast'
 export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [loginMode, setLoginMode] = useState<'magic' | 'password'>('magic')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [isSignUp, setIsSignUp] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [sent, setSent] = useState(false)
+  
   const supabase = getClientSupabase()
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!email) {
       toast.error('Please enter a valid email address.')
       return
     }
+    if (!password) {
+      toast.error('Please enter a password.')
+      return
+    }
 
     setLoading(true)
     try {
-      if (loginMode === 'magic') {
-        const redirectUrl = `${window.location.origin}/auth/callback`
-        const { error } = await supabase.auth.signInWithOtp({
-          email,
-          options: {
-            emailRedirectTo: redirectUrl,
-          },
-        })
-
-        if (error) throw error
-
-        setSent(true)
-        toast.success('Magic link sent to your email!')
-      } else {
-        // Password login
-        if (!password) {
-          toast.error('Please enter your password.')
+      if (isSignUp) {
+        // Sign Up Flow
+        if (password !== confirmPassword) {
+          toast.error('Passwords do not match.')
+          setLoading(false)
+          return
+        }
+        if (password.length < 6) {
+          toast.error('Password must be at least 6 characters long.')
           setLoading(false)
           return
         }
 
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+        })
+
+        if (error) throw error
+
+        if (data.user && !data.session) {
+          toast.success('Account created! Please check your email for the confirmation link.')
+        } else {
+          toast.success('Account created and logged in successfully!')
+          window.location.href = '/dashboard'
+        }
+      } else {
+        // Sign In Flow
         const { error } = await supabase.auth.signInWithPassword({
           email,
           password,
@@ -52,11 +64,10 @@ export default function LoginPage() {
         if (error) throw error
 
         toast.success('Logged in successfully!')
-        // Redirect will be handled by Supabase session listener or manual route push
         window.location.href = '/dashboard'
       }
     } catch (error: any) {
-      toast.error(error.message || 'Something went wrong. Please try again.')
+      toast.error(error.message || 'Authentication failed. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -66,7 +77,7 @@ export default function LoginPage() {
     <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center bg-slate-50 px-4 py-12 sm:px-6 lg:px-8">
       <div className="w-full max-w-md space-y-8 rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
         {/* Back Link */}
-        <div className="flex items-center justify-between">
+        <div>
           <Link
             href="/"
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 transition-colors hover:text-slate-800"
@@ -74,117 +85,125 @@ export default function LoginPage() {
             <ArrowLeft className="h-3.5 w-3.5" />
             <span>Back to landing page</span>
           </Link>
-
-          <button
-            type="button"
-            onClick={() => {
-              setLoginMode(loginMode === 'magic' ? 'password' : 'magic')
-              setSent(false)
-            }}
-            className="text-xs font-bold text-blue-600 hover:text-blue-700 underline"
-          >
-            {loginMode === 'magic' ? 'Use Password Sign In' : 'Use Magic Link Sign In'}
-          </button>
         </div>
 
         {/* Title */}
         <div className="text-center">
           <h2 className="text-2xl font-bold tracking-tight text-slate-900">
-            Sign in to ProCV
+            {isSignUp ? 'Create your ProCV Account' : 'Sign in to ProCV'}
           </h2>
           <p className="mt-2 text-sm text-slate-600">
-            {loginMode === 'magic'
-              ? "No password needed. We'll email you a secure login link."
+            {isSignUp
+              ? 'Start optimizing your CV with Kimi AI for free.'
               : 'Enter your credentials below to log in.'}
           </p>
         </div>
 
-        {sent && loginMode === 'magic' ? (
-          <div className="rounded-xl bg-blue-50/50 border border-blue-100 p-6 text-center animate-fade-in">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-blue-600 mb-4">
-              <Mail className="h-5.5 w-5.5" />
+        <form onSubmit={handleAuth} className="space-y-6">
+          <div className="space-y-4">
+            {/* Email Address */}
+            <div>
+              <label htmlFor="email" className="block text-xs font-bold text-slate-700 uppercase tracking-wide">
+                Email Address
+              </label>
+              <div className="relative mt-2">
+                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                  <Mail className="h-4 w-4 text-slate-400" />
+                </div>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="name@example.com"
+                  className="block w-full rounded-lg border border-slate-350 bg-white py-2.5 pl-10 pr-3 text-sm text-slate-800 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
+              </div>
             </div>
-            <h3 className="text-sm font-semibold text-slate-800">Check your email</h3>
-            <p className="mt-2 text-xs leading-relaxed text-slate-600">
-              We sent a magic link to <strong className="text-slate-900">{email}</strong>.
-              Click the link to log in instantly.
-            </p>
-            <button
-              onClick={() => setSent(false)}
-              className="mt-5 text-xs font-bold text-blue-600 hover:text-blue-700 underline"
-            >
-              Didn&apos;t receive it? Try again
-            </button>
-          </div>
-        ) : (
-          <form onSubmit={handleLogin} className="space-y-6">
-            <div className="space-y-4">
-              <div>
-                <label htmlFor="email" className="block text-xs font-bold text-slate-700 uppercase tracking-wide">
-                  Email Address
+
+            {/* Password */}
+            <div>
+              <label htmlFor="password" className="block text-xs font-bold text-slate-700 uppercase tracking-wide">
+                Password
+              </label>
+              <div className="relative mt-2">
+                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                  <Lock className="h-4 w-4 text-slate-400" />
+                </div>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="block w-full rounded-lg border border-slate-350 bg-white py-2.5 pl-10 pr-3 text-sm text-slate-800 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
+              </div>
+            </div>
+
+            {/* Confirm Password (only visible on Sign Up) */}
+            {isSignUp && (
+              <div className="animate-fade-in">
+                <label htmlFor="confirmPassword" className="block text-xs font-bold text-slate-700 uppercase tracking-wide">
+                  Confirm Password
                 </label>
                 <div className="relative mt-2">
                   <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <Mail className="h-4 w-4 text-slate-400" />
+                    <Lock className="h-4 w-4 text-slate-400" />
                   </div>
                   <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    type="password"
                     required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="name@example.com"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="••••••••"
                     className="block w-full rounded-lg border border-slate-350 bg-white py-2.5 pl-10 pr-3 text-sm text-slate-800 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   />
                 </div>
               </div>
+            )}
+          </div>
 
-              {loginMode === 'password' && (
-                <div className="animate-fade-in">
-                  <label htmlFor="password" className="block text-xs font-bold text-slate-700 uppercase tracking-wide">
-                    Password
-                  </label>
-                  <div className="relative mt-2">
-                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                      <Lock className="h-4 w-4 text-slate-400" />
-                    </div>
-                    <input
-                      id="password"
-                      name="password"
-                      type="password"
-                      required
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder="••••••••"
-                      className="block w-full rounded-lg border border-slate-350 bg-white py-2.5 pl-10 pr-3 text-sm text-slate-800 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                    />
-                  </div>
-                </div>
+          <div>
+            <button
+              type="submit"
+              disabled={loading}
+              className="flex w-full justify-center items-center gap-2 rounded-lg bg-blue-600 py-2.5 text-sm font-semibold text-white transition-all hover:bg-blue-700 disabled:bg-blue-400 shadow-sm"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span>{isSignUp ? 'Creating account...' : 'Logging in...'}</span>
+                </>
+              ) : (
+                <span>{isSignUp ? 'Create Account' : 'Sign In'}</span>
               )}
-            </div>
+            </button>
+          </div>
+        </form>
 
-            <div>
-              <button
-                type="submit"
-                disabled={loading}
-                className="flex w-full justify-center items-center gap-2 rounded-lg bg-blue-600 py-2.5 text-sm font-semibold text-white transition-all hover:bg-blue-700 disabled:bg-blue-400 shadow-sm"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    <span>{loginMode === 'magic' ? 'Sending login link...' : 'Logging in...'}</span>
-                  </>
-                ) : (
-                  <span>{loginMode === 'magic' ? 'Send Magic Link' : 'Sign In'}</span>
-                )}
-              </button>
-            </div>
-          </form>
-        )}
+        {/* Switch Auth mode */}
+        <div className="text-center">
+          <button
+            type="button"
+            onClick={() => {
+              setIsSignUp(!isSignUp)
+              setPassword('')
+              setConfirmPassword('')
+            }}
+            className="text-xs font-bold text-blue-600 hover:text-blue-700 underline"
+          >
+            {isSignUp ? 'Already have an account? Sign In' : "Don't have an account? Create one"}
+          </button>
+        </div>
       </div>
     </div>
   )
 }
-

@@ -54,7 +54,7 @@ RULES:
 
 export async function POST(req: NextRequest) {
   try {
-    const { cvText, industry, jobDescription, language, jobId } = await req.json()
+    const { cvText, industry, jobDescription, language, jobId, stylePreference = 'random' } = await req.json()
 
     if (!cvText || !industry || !language || !jobId) {
       return NextResponse.json(
@@ -139,8 +139,13 @@ Please run the full transformation and output all sections as specified in your 
     // Parse sections
     const sections = parseKimiOutput(fullOutput)
 
+    // Select next template using TemplateRotationEngine
+    const { TemplateRotationEngine } = await import('@/lib/templateRotation')
+    const rotation = new TemplateRotationEngine()
+    const templateId = await rotation.getNextTemplate(userId, stylePreference)
+
     // 2. Update job details
-    const { error: updateError } = await supabase
+    let { error: updateError } = await supabase
       .from('cv_jobs')
       .update({
         status: 'completed',
@@ -150,9 +155,32 @@ Please run the full transformation and output all sections as specified in your 
         cover_letter: sections.coverLetter,
         gap_analysis: sections.gapAnalysisJson,
         completed_at: new Date().toISOString(),
-        is_beta_job: isBetaActive()
+        is_beta_job: isBetaActive(),
+        template_used: templateId
       })
       .eq('id', jobId)
+
+    if (updateError) {
+      if (updateError.code === '42703' || updateError.message?.includes('template_used')) {
+        console.warn('⚠️ Warning: "template_used" column not found in database. Retrying update without it. Please execute the SQL migration in "migration_history.sql" to enable template history tracking.')
+        
+        const fallback = await supabase
+          .from('cv_jobs')
+          .update({
+            status: 'completed',
+            ats_score: sections.atsScoreJson,
+            generated_cv: sections.revampedCV,
+            linkedin_optimizer: sections.linkedinJson,
+            cover_letter: sections.coverLetter,
+            gap_analysis: sections.gapAnalysisJson,
+            completed_at: new Date().toISOString(),
+            is_beta_job: isBetaActive()
+          })
+          .eq('id', jobId)
+          
+        updateError = fallback.error
+      }
+    }
 
     if (updateError) {
       console.error('Error updating job status:', updateError)
@@ -183,7 +211,7 @@ Please run the full transformation and output all sections as specified in your 
       }
     }
 
-    return NextResponse.json({ success: true, sections })
+    return NextResponse.json({ success: true, sections, templateId })
   } catch (error: any) {
     console.error('Error in /api/generate-cv:', error)
     return NextResponse.json(

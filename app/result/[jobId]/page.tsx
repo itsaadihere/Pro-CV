@@ -56,21 +56,20 @@ export default function ResultPage() {
   const [copiedText, setCopiedText] = useState<Record<string, boolean>>({})
 
   // Template and Color Selection states
-  const [selectedTemplate, setSelectedTemplate] = useState<'ats' | 'modern' | 'minimalist'>('ats')
+  const [selectedTemplate, setSelectedTemplate] = useState<string>('min-14-white-blue-minimalist-corporate-ats')
   const [selectedColor, setSelectedColor] = useState<string>('classic')
 
-  // Randomly initialize template and theme on mount
+  // Gemini Layout Formatting states
+  const [displayCVText, setDisplayCVText] = useState('')
+  const [formatting, setFormatting] = useState(false)
+  const [downloadingPDF, setDownloadingPDF] = useState(false)
+
+  // Initialize template from job details on mount
   useEffect(() => {
-    const templates = ['ats', 'modern', 'minimalist'] as const
-    const randomTemplate = templates[Math.floor(Math.random() * templates.length)]
-    
-    let defaultTheme = 'classic'
-    if (randomTemplate === 'modern') defaultTheme = 'blue'
-    else if (randomTemplate === 'minimalist') defaultTheme = 'charcoal'
-    
-    setSelectedTemplate(randomTemplate)
-    setSelectedColor(defaultTheme)
-  }, [])
+    if (jobData?.template_used) {
+      setSelectedTemplate(jobData.template_used)
+    }
+  }, [jobData?.template_used])
 
   // Beta Feedback states
   const [rating, setRating] = useState<string | null>(null)
@@ -102,6 +101,12 @@ export default function ResultPage() {
         }
 
         setJobData(job)
+        if (job?.generated_cv) {
+          setDisplayCVText(job.generated_cv)
+        }
+        if (job?.template_used) {
+          setSelectedTemplate(job.template_used)
+        }
 
         // Attempt to parse/fetch original CV text from file storage if available, 
         // otherwise we fallback to a placeholder message.
@@ -119,6 +124,63 @@ export default function ResultPage() {
     loadJobDetails()
   }, [jobId, supabase, router])
 
+  // Synchronize display text
+  useEffect(() => {
+    if (jobData?.generated_cv) {
+      setDisplayCVText(jobData.generated_cv)
+    }
+  }, [jobData?.generated_cv])
+
+  const handleDownloadPDF = async () => {
+    if (!jobData?.pdf_output_path) {
+      toast.error('PDF file path not found. Try regenerating.')
+      return
+    }
+    const a = document.createElement('a')
+    a.href = jobData.pdf_output_path
+    a.download = `ProCV-${selectedTemplate}-${jobId.substring(0, 8)}.pdf`
+    document.body.appendChild(a)
+    a.click()
+    a.remove()
+    toast.success('Successfully downloaded PDF!')
+  }
+
+  const handleRegenerateWithDifferentTemplate = async () => {
+    setDownloadingPDF(true)
+    try {
+      const res = await fetch('/api/rotate-template', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          jobId,
+          preferredStyle: 'modern'
+        }),
+      })
+
+      if (!res.ok) {
+        throw new Error('Failed to rotate template')
+      }
+
+      const data = await res.json()
+      
+      setJobData((prev: any) => ({
+        ...prev,
+        template_used: data.templateId,
+        pdf_output_path: data.pdfUrl
+      }))
+      
+      setSelectedTemplate(data.templateId)
+      toast.success('Successfully updated template and PDF!')
+    } catch (err: any) {
+      console.error(err)
+      toast.error(err.message || 'Error rotating template.')
+    } finally {
+      setDownloadingPDF(false)
+    }
+  }
+
   const triggerEmailResend = async () => {
     setSendingEmail(true)
     try {
@@ -130,7 +192,8 @@ export default function ResultPage() {
         body: JSON.stringify({ 
           jobId,
           template: selectedTemplate,
-          color: selectedColor
+          color: selectedColor,
+          cvText: displayCVText
         }),
       })
 
@@ -313,6 +376,8 @@ export default function ResultPage() {
                 setSelectedTemplate={setSelectedTemplate}
                 selectedColor={selectedColor}
                 setSelectedColor={setSelectedColor}
+                displayCVText={displayCVText}
+                formatting={formatting}
               />
             </div>
           )}
@@ -573,19 +638,30 @@ export default function ResultPage() {
 
           <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto justify-end">
             <a
-              href={`/api/export-pdf?jobId=${jobId}&template=ats&color=classic`}
+              href={`/api/export-pdf?jobId=${jobId}&template=min-14-white-blue-minimalist-corporate-ats`}
               className="flex items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-sm transition-colors hover:bg-slate-50"
               title="Download standard plain ATS CV"
             >
               <span>ATS-Safe (Standard)</span>
             </a>
-            <a
-              href={`/api/export-pdf?jobId=${jobId}&template=${selectedTemplate}&color=${selectedColor}`}
-              className="flex items-center justify-center gap-1.5 rounded-lg bg-gold px-4 py-2.5 text-xs font-extrabold text-white shadow-md shadow-gold-100 hover:bg-gold-600 hover:shadow-lg hover:shadow-gold-200 transition-all"
-              title="Download PDF with your active layout & color"
+            <button
+              onClick={handleDownloadPDF}
+              disabled={downloadingPDF}
+              className="flex items-center justify-center gap-1.5 rounded-lg bg-gold px-4 py-2.5 text-xs font-extrabold text-white shadow-md shadow-gold-100 hover:bg-gold-600 hover:shadow-lg hover:shadow-gold-200 transition-all disabled:opacity-60"
+              title="Download your active PDF layout"
             >
-              <span>Download Active Design ({selectedTemplate.toUpperCase()})</span>
-            </a>
+              {downloadingPDF && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+              <span>Download PDF</span>
+            </button>
+            <button
+              onClick={handleRegenerateWithDifferentTemplate}
+              disabled={downloadingPDF}
+              className="flex items-center justify-center gap-1.5 rounded-lg border border-slate-350 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-sm hover:bg-slate-50 hover:border-slate-450 transition-all disabled:opacity-60"
+              title="Rotate to another design layout"
+            >
+              {downloadingPDF && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+              <span>Try Different Template</span>
+            </button>
             <button
               onClick={triggerEmailResend}
               disabled={sendingEmail}

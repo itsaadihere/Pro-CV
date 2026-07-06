@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@react-pdf/renderer": "^4.5.1",
+    "@sparticuz/chromium": "^149.0.0",
     "@supabase/auth-helpers-nextjs": "^0.15.0",
     "@supabase/supabase-js": "^2.108.2",
     "crypto-js": "^4.2.0",
@@ -17,7 +18,10 @@
     "lucide-react": "^1.22.0",
     "mammoth": "^1.12.0",
     "next": "14.2.35",
+    "nodemailer": "^9.0.3",
     "pdf-parse": "^1.1.1",
+    "puppeteer": "^25.3.0",
+    "puppeteer-core": "^25.3.0",
     "react": "^18",
     "react-dom": "^18",
     "react-dropzone": "^15.0.0",
@@ -26,6 +30,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.19.43",
+    "@types/nodemailer": "^8.0.1",
     "@types/react": "^18.3.31",
     "@types/react-dom": "^18.3.7",
     "eslint": "^8",

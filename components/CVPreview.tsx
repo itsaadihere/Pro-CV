@@ -4,14 +4,18 @@ import { useState, useEffect } from 'react'
 import { Copy, Check, Eye, Columns, Loader2 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { parseCVText } from '@/lib/pdf-export'
+import { getTemplate } from '@/components/cv-templates'
+import { parseKimiCV } from '@/lib/cvParser'
 
 interface CVPreviewProps {
   originalText: string
   revampedText: string
-  selectedTemplate: 'ats' | 'modern' | 'minimalist'
-  setSelectedTemplate: (template: 'ats' | 'modern' | 'minimalist') => void
+  selectedTemplate: string
+  setSelectedTemplate: (template: string) => void
   selectedColor: string
   setSelectedColor: (color: string) => void
+  displayCVText: string
+  formatting: boolean
 }
 
 const colorOptions: Record<string, { id: string; name: string; hex: string }[]> = {
@@ -38,53 +42,14 @@ export default function CVPreview({
   selectedTemplate,
   setSelectedTemplate,
   selectedColor,
-  setSelectedColor
+  setSelectedColor,
+  displayCVText,
+  formatting
 }: CVPreviewProps) {
   const [activeTab, setActiveTab] = useState<'after' | 'before'>('after')
   const [layoutMode, setLayoutMode] = useState<'split' | 'single'>('split')
   const [copied, setCopied] = useState(false)
   const [viewMode, setViewMode] = useState<'visual' | 'text'>('visual')
-
-  // Gemini Layout Formatting states
-  const [displayCVText, setDisplayCVText] = useState(revampedText)
-  const [formatting, setFormatting] = useState(false)
-
-  useEffect(() => {
-    let active = true
-
-    async function fetchGeminiFormat() {
-      if (!revampedText) return
-      
-      setFormatting(true)
-      try {
-        const res = await fetch('/api/format-cv', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            cvText: revampedText,
-            template: selectedTemplate,
-          }),
-        })
-
-        if (res.ok && active) {
-          const data = await res.json()
-          setDisplayCVText(data.formattedText)
-        }
-      } catch (err) {
-        console.error('Error fetching Gemini format:', err)
-      } finally {
-        if (active) setFormatting(false)
-      }
-    }
-
-    fetchGeminiFormat()
-
-    return () => {
-      active = false
-    }
-  }, [selectedTemplate, revampedText])
 
   const handleTemplateChange = (t: 'ats' | 'modern' | 'minimalist') => {
     setSelectedTemplate(t)
@@ -166,44 +131,10 @@ export default function CVPreview({
             </button>
           </div>
 
-          {/* Template Selectors (only visible when in visual mode and showing optimized CV) */}
+          {/* Template label */}
           {viewMode === 'visual' && activeTab === 'after' && (
-            <div className="flex rounded-lg border border-slate-200 bg-white p-1 animate-fade-in shadow-inner">
-              {(['ats', 'modern', 'minimalist'] as const).map((t) => (
-                <button
-                  key={t}
-                  onClick={() => handleTemplateChange(t)}
-                  className={`rounded-md px-3 py-1.5 text-xs font-extrabold transition-all uppercase ${
-                    selectedTemplate === t
-                      ? 'bg-slate-800 text-white shadow-sm'
-                      : 'text-slate-500 hover:bg-slate-50'
-                  }`}
-                >
-                  {t}
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* Accent Color Circle Selector */}
-          {viewMode === 'visual' && activeTab === 'after' && (
-            <div className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1 animate-fade-in shadow-inner">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mr-1">Contrast</span>
-              <div className="flex items-center gap-1.5">
-                {colorOptions[selectedTemplate]?.map((opt) => (
-                  <button
-                    key={opt.id}
-                    onClick={() => setSelectedColor(opt.id)}
-                    className={`h-5 w-5 rounded-full border transition-all flex items-center justify-center ${
-                      selectedColor === opt.id 
-                        ? 'ring-2 ring-blue-500 border-white scale-110 shadow-sm' 
-                        : 'border-slate-350 hover:scale-105'
-                    }`}
-                    style={{ backgroundColor: opt.hex }}
-                    title={opt.name}
-                  />
-                ))}
-              </div>
+            <div className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 shadow-inner">
+              <span>Active Style: <strong className="font-mono text-blue-600 uppercase">{selectedTemplate.replace(/^m-|^min-/, '').replace(/-/g, ' ')}</strong></span>
             </div>
           )}
 
@@ -345,310 +276,17 @@ function VisualCV({
   colorTheme 
 }: { 
   cvText: string; 
-  template: 'ats' | 'modern' | 'executive' | 'minimalist' | 'creative'; 
+  template: string; 
   colorTheme: string 
 }) {
-  const elements = parseCVText(cvText)
+  const cvData = parseKimiCV(cvText)
+  const TemplateComponent = getTemplate(template)
   
-  const isAts = template === 'ats'
-  const isModern = template === 'modern'
-  const isExecutive = template === 'executive'
-  const isMinimalist = template === 'minimalist'
-  const isCreative = template === 'creative'
-
-  // Theme customization parameters
-  let primaryColor = 'text-slate-900'
-  let secondaryColor = 'text-slate-500'
-  let accentColor = 'bg-blue-600'
-  let accentTextColor = 'text-blue-600'
-  let accentBorderColor = 'border-slate-200'
-  let bgStyles = 'bg-white'
-  let fontStyles = 'font-sans'
-
-  if (isAts) {
-    fontStyles = 'font-sans text-[12px]'
-    if (colorTheme === 'navy') {
-      primaryColor = 'text-slate-900'
-      secondaryColor = 'text-slate-500'
-      accentBorderColor = 'border-slate-300'
-    } else if (colorTheme === 'charcoal') {
-      primaryColor = 'text-zinc-800'
-      secondaryColor = 'text-zinc-550'
-      accentBorderColor = 'border-zinc-300'
-    } else {
-      primaryColor = 'text-black'
-      secondaryColor = 'text-slate-500'
-      accentBorderColor = 'border-slate-200'
-    }
-  } else if (isModern) {
-    fontStyles = 'font-sans text-[12px]'
-    if (colorTheme === 'gold') {
-      primaryColor = 'text-slate-900'
-      secondaryColor = 'text-gold-700'
-      accentColor = 'bg-gold'
-      accentTextColor = 'text-gold'
-      accentBorderColor = 'border-gold-200'
-    } else if (colorTheme === 'purple') {
-      primaryColor = 'text-violet-950'
-      secondaryColor = 'text-violet-700'
-      accentColor = 'bg-violet-600'
-      accentTextColor = 'text-violet-600'
-      accentBorderColor = 'border-violet-250'
-    } else { // blue
-      primaryColor = 'text-blue-950'
-      secondaryColor = 'text-blue-700'
-      accentColor = 'bg-blue-600'
-      accentTextColor = 'text-blue-600'
-      accentBorderColor = 'border-blue-250'
-    }
-  } else if (isExecutive) {
-    fontStyles = 'font-serif text-[13px] leading-relaxed'
-    if (colorTheme === 'burgundy') {
-      primaryColor = 'text-rose-950'
-      secondaryColor = 'text-slate-600'
-      accentBorderColor = 'border-rose-900/40'
-      accentTextColor = 'text-rose-900'
-    } else if (colorTheme === 'navy') {
-      primaryColor = 'text-slate-950'
-      secondaryColor = 'text-slate-600'
-      accentBorderColor = 'border-blue-950/40'
-      accentTextColor = 'text-blue-950'
-    } else {
-      primaryColor = 'text-black'
-      secondaryColor = 'text-slate-700'
-      accentBorderColor = 'border-black/30'
-      accentTextColor = 'text-black'
-    }
-  } else if (isMinimalist) {
-    fontStyles = 'font-sans text-[11.5px] tracking-wide'
-    if (colorTheme === 'warm') {
-      primaryColor = 'text-amber-950'
-      secondaryColor = 'text-amber-800'
-      accentColor = 'bg-amber-500'
-      accentTextColor = 'text-amber-700'
-      accentBorderColor = 'border-amber-200'
-      bgStyles = 'bg-amber-50/20'
-    } else if (colorTheme === 'gold') {
-      primaryColor = 'text-slate-900'
-      secondaryColor = 'text-gold-700'
-      accentColor = 'bg-gold'
-      accentTextColor = 'text-gold'
-      accentBorderColor = 'border-gold-200'
-      bgStyles = 'bg-gold-50/10'
-    } else { // charcoal
-      primaryColor = 'text-zinc-800'
-      secondaryColor = 'text-zinc-500'
-      accentColor = 'bg-zinc-400'
-      accentTextColor = 'text-zinc-650'
-      accentBorderColor = 'border-zinc-200'
-      bgStyles = 'bg-zinc-50/30'
-    }
-  } else if (isCreative) {
-    fontStyles = 'font-sans text-[12px]'
-    if (colorTheme === 'blue') {
-      primaryColor = 'text-blue-900'
-      secondaryColor = 'text-blue-200'
-      accentColor = 'bg-blue-800'
-      accentTextColor = 'text-blue-700'
-      accentBorderColor = 'border-blue-200'
-    } else if (colorTheme === 'crimson') {
-      primaryColor = 'text-red-900'
-      secondaryColor = 'text-red-200'
-      accentColor = 'bg-red-800'
-      accentTextColor = 'text-red-705'
-      accentBorderColor = 'border-red-200'
-    } else { // teal
-      primaryColor = 'text-teal-900'
-      secondaryColor = 'text-teal-200'
-      accentColor = 'bg-teal-700'
-      accentTextColor = 'text-teal-600'
-      accentBorderColor = 'border-teal-200'
-    }
-  }
-
-function renderHTMLPreviewElement(el: any, idx: number, theme: any) {
-  if (el.type === 'empty') {
-    return <div key={idx} className="h-2" />
-  }
-  if (el.type === 'name') {
-    return <h1 key={idx} className={`text-xl sm:text-2xl font-bold mb-1 ${theme.primaryColor}`}>{el.text}</h1>
-  }
-  if (el.type === 'contact') {
-    return <p key={idx} className={`text-[11px] sm:text-xs mb-3 ${theme.secondaryColor}`}>{el.text}</p>
-  }
-  if (el.type === 'header') {
-    return (
-      <h2 key={idx} className={`font-bold uppercase tracking-wider text-[11px] sm:text-xs pb-1 mt-3 mb-1.5 ${
-        theme.isModern 
-          ? `${theme.accentTextColor} border-b ${theme.accentBorderColor}` 
-          : theme.isMinimalist 
-          ? `${theme.primaryColor} border-b ${theme.accentBorderColor} tracking-widest`
-          : `text-black border-b ${theme.accentBorderColor}`
-      }`}>
-        {el.text}
-      </h2>
-    )
-  }
-  if (el.type === 'bullet') {
-    return (
-      <div key={idx} className="flex items-start gap-1.5 mb-1 pl-1">
-        <span className={`text-[9px] select-none ${theme.accentTextColor || 'text-slate-500'}`}>•</span>
-        <span className={`text-[11px] sm:text-[12px] flex-1 text-justify ${theme.fontStyles || 'font-sans'} text-slate-700`}>
-          {el.text}
-        </span>
-      </div>
-    )
-  }
   return (
-    <p key={idx} className={`text-[11px] sm:text-[12px] text-justify mb-1.5 ${theme.fontStyles || 'font-sans'} text-slate-700`}>
-      {el.text}
-    </p>
-  )
-}
-
-  if (isCreative) {
-    const nameEl = elements.find(el => el.type === 'name')
-    const contactEl = elements.find(el => el.type === 'contact')
-    const bodyElements = elements.filter(el => el !== nameEl && el !== contactEl)
-
-    return (
-      <div className={`w-full bg-white overflow-y-auto max-h-[600px] text-left shadow-inner ${fontStyles}`} style={{ minHeight: '500px' }}>
-        <div className={`${accentColor} p-6 sm:p-8 text-white`}>
-          {nameEl && <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">{nameEl.text}</h1>}
-          {contactEl && <p className="text-[11px] sm:text-xs mt-1.5 opacity-90">{contactEl.text}</p>}
-        </div>
-        <div className="p-6 sm:p-8 space-y-3">
-          {bodyElements.map((el, idx) => renderHTMLPreviewElement(el, idx, { primaryColor, secondaryColor, accentTextColor, accentBorderColor, isModern: false, fontStyles }))}
-        </div>
+    <div className="w-full overflow-y-auto max-h-[600px] flex justify-center bg-slate-100 p-4 border border-slate-200 rounded-b-2xl">
+      <div style={{ transform: 'scale(0.6)', transformOrigin: 'top center', height: '674px', overflow: 'hidden' }}>
+        <TemplateComponent data={cvData} scale={0.6} />
       </div>
-    )
-  }
-
-  if (isModern) {
-    const nameEl = elements.find(el => el.type === 'name')
-    const contactEl = elements.find(el => el.type === 'contact')
-    
-    const sidebarSectionHeaders = [
-      'skills', 'education', 'languages', 'certifications', 'skills & tools', 
-      'interests', 'hobbies', 'contact', 'core skills', 'technical skills',
-      'education & credentials', 'languages & tools'
-    ]
-    
-    const leftColumnElements: any[] = []
-    const rightColumnElements: any[] = []
-    let currentColumn = rightColumnElements
-
-    elements.forEach((el) => {
-      if (el === nameEl || el === contactEl) return
-      if (el.type === 'header') {
-        const headerTextLower = el.text.toLowerCase()
-        const isSidebarSection = sidebarSectionHeaders.some(h => headerTextLower.includes(h))
-        currentColumn = isSidebarSection ? leftColumnElements : rightColumnElements
-      }
-      currentColumn.push(el)
-    })
-
-    return (
-      <div className={`w-full bg-white p-6 sm:p-8 overflow-y-auto max-h-[600px] text-left shadow-inner ${fontStyles}`} style={{ minHeight: '500px' }}>
-        {/* Top Header Section */}
-        <div className={`border-b ${accentBorderColor} pb-2.5 mb-4`}>
-          {nameEl && <h1 className={`text-2xl sm:text-3xl font-bold tracking-tight ${primaryColor}`}>{nameEl.text}</h1>}
-          {contactEl && <p className={`text-[11px] sm:text-xs mt-1.5 ${secondaryColor}`}>{contactEl.text}</p>}
-        </div>
-
-        {/* 2-Column Split Body */}
-        <div className="flex flex-col md:flex-row gap-5">
-          {/* Left Column (32%) */}
-          <div className={`w-full md:w-[32%] md:border-r ${accentBorderColor} md:pr-4 space-y-3`}>
-            {leftColumnElements.map((el, idx) => renderHTMLPreviewElement(el, idx, { primaryColor, secondaryColor, accentTextColor, accentBorderColor, isModern: true, fontStyles }))}
-          </div>
-          {/* Right Column (68%) */}
-          <div className="w-full md:w-[68%] space-y-3">
-            {rightColumnElements.map((el, idx) => renderHTMLPreviewElement(el, idx, { primaryColor, secondaryColor, accentTextColor, accentBorderColor, isModern: true, fontStyles }))}
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  return (
-    <div 
-      className={`w-full ${bgStyles} p-8 sm:p-12 overflow-y-auto max-h-[600px] text-left shadow-inner ${fontStyles}`}
-      style={{ minHeight: '500px' }}
-    >
-      {elements.map((el, idx) => {
-        if (el.type === 'empty') {
-          return <div key={idx} className={isModern || isExecutive ? 'h-3.5' : 'h-2.5'} />
-        }
-        if (el.type === 'name') {
-          return (
-            <h1 
-              key={idx} 
-              className={`font-bold tracking-tight mb-1 ${
-                isExecutive 
-                  ? 'text-2xl sm:text-3xl text-center text-black' 
-                  : isMinimalist
-                  ? `text-xl sm:text-2xl text-center uppercase tracking-widest ${primaryColor}`
-                  : 'text-xl sm:text-2xl text-center text-black'
-              }`}
-            >
-              {el.text}
-            </h1>
-          )
-        }
-        if (el.type === 'contact') {
-          return (
-            <p 
-              key={idx} 
-              className={`mb-4 ${
-                isExecutive 
-                  ? 'text-[11px] sm:text-xs text-center italic text-slate-650' 
-                  : isMinimalist
-                  ? `text-[10px] sm:text-[11px] text-center tracking-wider pb-3 border-b ${accentBorderColor} ${secondaryColor}`
-                  : `text-[11px] sm:text-xs text-center ${secondaryColor}`
-              }`}
-            >
-              {el.text}
-            </p>
-          )
-        }
-        if (el.type === 'header') {
-          return (
-            <h2 
-              key={idx} 
-              className={`font-bold uppercase tracking-wider pb-1 mt-4 mb-2 ${
-                isExecutive 
-                  ? `text-xs sm:text-sm text-center border-b ${accentBorderColor} ${primaryColor}` 
-                  : isMinimalist
-                  ? `text-xs ${primaryColor} border-b ${accentBorderColor} tracking-widest`
-                  : `text-xs sm:text-sm border-b ${accentBorderColor} text-black`
-              }`}
-            >
-              {el.text}
-            </h2>
-          )
-        }
-        if (el.type === 'bullet') {
-          return (
-            <div key={idx} className="flex items-start gap-2 mb-1.5 pl-3 sm:pl-5">
-              <span className="text-[10px] select-none text-slate-500">•</span>
-              <span className={`text-[11px] sm:text-[12.5px] flex-1 text-justify ${isMinimalist ? 'text-slate-700' : isExecutive ? 'text-slate-850' : 'text-slate-750'}`}>
-                {el.text}
-              </span>
-            </div>
-          )
-        }
-        return (
-          <p 
-            key={idx} 
-            className={`text-[11px] sm:text-[12.5px] mb-2 text-justify ${
-              isMinimalist ? 'text-slate-700' : isExecutive ? 'text-slate-850' : 'text-slate-750'
-            }`}
-          >
-            {el.text}
-          </p>
-        )
-      })}
     </div>
   )
 }

@@ -55,6 +55,7 @@ export default function UploadPage() {
   const [industry, setIndustry] = useState('Tech')
   const [jobDescription, setJobDescription] = useState('')
   const [language, setLanguage] = useState('EN')
+  const [stylePreference, setStylePreference] = useState<'modern' | 'minimalist' | 'random'>('modern')
 
   // Processing states
   const [processing, setProcessing] = useState(false)
@@ -173,6 +174,7 @@ export default function UploadPage() {
           jobDescription,
           language,
           jobId,
+          stylePreference,
         }),
       })
 
@@ -181,7 +183,26 @@ export default function UploadPage() {
         throw new Error(generateData.error || 'Kimi AI optimization failed.')
       }
 
-      // Step 5: Email the generated CV PDF to the user
+      // Step 5: Generating PDF template
+      setCurrentStep(4)
+      setProgressPercent(75)
+
+      const exportRes = await fetch('/api/export-pdf', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          jobId,
+          templateId: generateData.templateId
+        }),
+      })
+
+      if (!exportRes.ok) {
+        throw new Error('Failed to generate PDF template.')
+      }
+
+      // Step 6: Email the generated CV PDF to the user
       setCurrentStep(5)
       setProgressPercent(90)
 
@@ -359,6 +380,8 @@ export default function UploadPage() {
                         ))}
                       </select>
                     </div>
+
+
 
                     {/* Action Button */}
                     <div className="pt-4 border-t border-slate-100">

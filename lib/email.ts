@@ -81,6 +81,9 @@ export async function sendCVEmail({
         user,
         pass,
       },
+      tls: {
+        rejectUnauthorized: false // bypass TLS certificate validation errors in dev/prod
+      }
     })
 
     await transporter.sendMail({

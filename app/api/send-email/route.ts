@@ -89,7 +89,7 @@ export async function POST(req: NextRequest) {
 
     if (!emailSent) {
       return NextResponse.json(
-        { error: 'Failed to send email. If using a Resend free/sandbox account, ensure the recipient email matches your Resend account email, or check server logs.' },
+        { error: 'Failed to send email via Titan Mail. Ensure your SMTP credentials are configured correctly in your .env.local file, or check server logs.' },
         { status: 500 }
       )
     }

@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
       pp_TxnCurrency: 'PKR',
       pp_TxnDateTime: txnDateTime,
       pp_BillReference: billRef,
-      pp_Description: 'ProCV AI CV Revamp - 1 Credit',
+      pp_Description: 'Sophi AI CV Revamp - 1 Credit',
       pp_TxnExpiryDateTime: expiryDateTime,
       pp_ReturnURL: `${appUrl}/api/payment/verify`,
       ppmpf_1: email || '',

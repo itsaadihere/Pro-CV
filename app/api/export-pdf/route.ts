@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServiceSupabase } from '@/lib/supabase-server'
 import { generateCVBuffer } from '@/lib/pdf-export'
+import { formatCVWithGemini } from '@/lib/gemini'
 
 export const dynamic = 'force-dynamic'
 
@@ -9,13 +10,15 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url)
     const jobId = searchParams.get('jobId')
-    const template = (searchParams.get('template') || 'ats') as 'ats' | 'modern' | 'executive'
+    const template = (searchParams.get('template') || 'ats') as 'ats' | 'modern' | 'minimalist'
+    const color = searchParams.get('color') || 'classic'
 
     if (!jobId) {
       return NextResponse.json({ error: 'Missing jobId parameter' }, { status: 400 })
     }
 
-    if (!['ats', 'modern', 'executive'].includes(template)) {
+    const validTemplates = ['ats', 'modern', 'minimalist']
+    if (!validTemplates.includes(template)) {
       return NextResponse.json({ error: 'Invalid template type' }, { status: 400 })
     }
 
@@ -37,14 +40,17 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'CV content is empty or not yet generated' }, { status: 400 })
     }
 
-    // Generate the PDF buffer
-    const pdfBuffer = await generateCVBuffer(job.generated_cv, template)
+    // Format the layout text using Gemini API
+    const geminiCVText = await formatCVWithGemini(job.generated_cv, template)
+
+    // Generate PDF buffer using the dynamically structured text (falls back to raw cv text if Gemini fails)
+    const pdfBuffer = await generateCVBuffer(geminiCVText || job.generated_cv, template, color)
 
     // Return the PDF buffer directly with headers triggering download
     return new NextResponse(new Uint8Array(pdfBuffer), {
       headers: {
         'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename="ProCV-${template}-${jobId.substring(0, 8)}.pdf"`,
+        'Content-Disposition': `attachment; filename="Sophi-${template}-${jobId.substring(0, 8)}.pdf"`,
       },
     })
   } catch (error: any) {

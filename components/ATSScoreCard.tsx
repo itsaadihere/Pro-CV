@@ -28,14 +28,14 @@ export default function ATSScoreCard({ scoreData }: ATSScoreProps) {
 
   // Determine colors based on score value
   const getScoreColor = (val: number) => {
-    if (val >= 85) return 'text-emerald-500 stroke-emerald-500'
-    if (val >= 70) return 'text-amber-500 stroke-amber-500'
+    if (val >= 85) return 'text-primary stroke-primary'
+    if (val >= 70) return 'text-gold stroke-gold'
     return 'text-red-500 stroke-red-500'
   }
 
   const getScoreBgColor = (val: number) => {
-    if (val >= 85) return 'bg-emerald-50 border-emerald-100'
-    if (val >= 70) return 'bg-amber-50 border-amber-100'
+    if (val >= 85) return 'bg-primary-50 border-primary-100'
+    if (val >= 70) return 'bg-gold-50 border-gold-100'
     return 'bg-red-50 border-red-100'
   }
 
@@ -89,11 +89,11 @@ export default function ATSScoreCard({ scoreData }: ATSScoreProps) {
           </div>
         </div>
 
-        <div className={`mt-6 w-full rounded-xl border px-4 py-3 text-center text-xs font-medium ${getScoreBgColor(overall)}`}>
+        <div className={`mt-6 w-full rounded-xl border px-4 py-3 text-center text-xs font-semibold ${getScoreBgColor(overall)}`}>
           {overall >= 85 ? (
-            <span className="text-emerald-800">Excellent! Ready for applications.</span>
+            <span className="text-primary-950">Excellent! Ready for applications.</span>
           ) : overall >= 70 ? (
-            <span className="text-amber-800">Good, but could be optimized further.</span>
+            <span className="text-gold-900">Good, but could be optimized further.</span>
           ) : (
             <span className="text-red-800">Needs attention before submitting.</span>
           )}
@@ -116,9 +116,9 @@ export default function ATSScoreCard({ scoreData }: ATSScoreProps) {
                   <motion.div
                     className={`h-full rounded-full ${
                       metric.value >= 85
-                        ? 'bg-emerald-500'
+                        ? 'bg-primary'
                         : metric.value >= 70
-                        ? 'bg-amber-500'
+                        ? 'bg-gold'
                         : 'bg-red-500'
                     }`}
                     initial={{ width: 0 }}
@@ -147,8 +147,8 @@ export default function ATSScoreCard({ scoreData }: ATSScoreProps) {
               ))}
             </ul>
           ) : (
-            <div className="flex items-center gap-2 text-sm text-emerald-800">
-              <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+            <div className="flex items-center gap-2 text-sm text-primary-950 font-bold">
+              <CheckCircle2 className="h-4 w-4 text-primary" />
               <span>No critical format or layout issues found. Excellent compliance!</span>
             </div>
           )}

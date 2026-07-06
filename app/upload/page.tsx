@@ -266,22 +266,22 @@ export default function UploadPage() {
                         key={step.id}
                         className={`flex items-center gap-3 text-sm font-semibold transition-all ${
                           isActive
-                            ? 'text-blue-600'
+                            ? 'text-primary'
                             : isCompleted
-                            ? 'text-emerald-600'
+                            ? 'text-gold'
                             : 'text-slate-400'
                         }`}
                       >
                         {isCompleted ? (
-                          <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-500" />
+                          <CheckCircle2 className="h-5 w-5 shrink-0 text-gold" />
                         ) : isActive ? (
-                          <Loader2 className="h-5 w-5 shrink-0 animate-spin text-blue-500" />
+                          <Loader2 className="h-5 w-5 shrink-0 animate-spin text-primary" />
                         ) : (
-                          <div className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-slate-200 text-[10px] text-slate-400 font-bold shrink-0">
+                          <div className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-slate-205 text-[10px] text-slate-400 font-bold shrink-0">
                             {step.id}
                           </div>
                         )}
-                        <span className={isActive ? 'font-bold' : 'font-medium'}>{step.label}</span>
+                        <span className={isActive ? 'font-extrabold' : 'font-medium'}>{step.label}</span>
                       </div>
                     )
                   })}

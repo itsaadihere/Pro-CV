@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServiceSupabase } from '@/lib/supabase-server'
 import { generateCVBuffer } from '@/lib/pdf-export'
+import { formatCVWithGemini } from '@/lib/gemini'
 import { sendCVEmail } from '@/lib/email'
 
 export async function POST(req: NextRequest) {
   try {
-    const { jobId } = await req.json()
+    const { jobId, template = 'ats', color = 'classic' } = await req.json()
 
     if (!jobId) {
       return NextResponse.json({ error: 'Missing jobId parameter' }, { status: 400 })
@@ -39,8 +40,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Associated user profile or email not found' }, { status: 404 })
     }
 
-    // 2. Generate PDF (using 'ats' template as the attachment)
-    const pdfBuffer = await generateCVBuffer(job.generated_cv, 'ats')
+    // 2. Format the layout text using Gemini API
+    const geminiCVText = await formatCVWithGemini(job.generated_cv, template)
+
+    // 3. Generate PDF buffer using the dynamically structured text (falls back to raw cv text if Gemini fails)
+    const pdfBuffer = await generateCVBuffer(geminiCVText || job.generated_cv, template, color)
 
     // 3. Send email
     const emailSent = await sendCVEmail({

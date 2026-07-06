@@ -74,7 +74,7 @@ export default function PaymentPage() {
   if (loading) {
     return (
       <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center bg-slate-50">
-        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
         <p className="mt-4 text-sm font-medium text-slate-500">Preparing checkout portal...</p>
       </div>
     )
@@ -100,7 +100,7 @@ export default function PaymentPage() {
           <div className="mt-6 rounded-xl bg-slate-50 p-5 border border-slate-150">
             <div className="flex items-start justify-between">
               <div>
-                <h3 className="text-base font-bold text-slate-800">ProCV CV Revamp Credit</h3>
+                <h3 className="text-base font-bold text-slate-800">Sophi CV Revamp Credit</h3>
                 <p className="text-xs text-slate-500 mt-1">Unlock 1 AI CV transformation & ATS review</p>
               </div>
               <span className="text-lg font-black text-slate-900">1,500 PKR</span>
@@ -115,26 +115,26 @@ export default function PaymentPage() {
           {/* Features Checklist */}
           <div className="mt-6 space-y-3">
             <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">What is included:</h4>
-            <div className="grid gap-2 text-sm text-slate-600">
+            <div className="grid gap-2 text-sm text-slate-655 font-medium">
               <div className="flex items-center gap-2">
-                <span className="text-blue-500">✓</span>
+                <span className="text-gold font-bold">✓</span>
                 <span>Complete CV rewrites by Kimi AI</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-blue-500">✓</span>
+                <span className="text-gold font-bold">✓</span>
                 <span>ATS Optimization (5 grading points)</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-blue-500">✓</span>
+                <span className="text-gold font-bold">✓</span>
                 <span>LinkedIn Headline & Profile Bio Optimization</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-blue-500">✓</span>
+                <span className="text-gold font-bold">✓</span>
                 <span>Professional JD-Tailored Cover Letter</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-blue-500">✓</span>
-                <span>PDF export in 3 designs (ATS-Safe, Modern, Executive)</span>
+                <span className="text-gold font-bold">✓</span>
+                <span>PDF export in 3 designs (ATS-Safe, Modern, Minimalist)</span>
               </div>
             </div>
           </div>
@@ -144,7 +144,7 @@ export default function PaymentPage() {
             <button
               onClick={handlePayment}
               disabled={paying}
-              className="flex w-full justify-center items-center gap-2 rounded-xl bg-blue-600 py-3.5 text-sm font-bold text-white transition-all hover:bg-blue-700 disabled:bg-blue-450 hover:shadow-lg hover:shadow-blue-100"
+              className="flex w-full justify-center items-center gap-2 rounded-xl bg-primary py-3.5 text-sm font-bold text-white transition-all hover:bg-primary-850 disabled:bg-primary-350 hover:shadow-lg hover:shadow-primary-100"
             >
               {paying ? (
                 <>
@@ -153,14 +153,14 @@ export default function PaymentPage() {
                 </>
               ) : (
                 <>
-                  <CreditCard className="h-4 w-4" />
+                  <CreditCard className="h-4 w-4 text-gold" />
                   <span>Pay with JazzCash</span>
                 </>
               )}
             </button>
 
             <div className="flex items-center justify-center gap-1.5 text-xs text-slate-400">
-              <ShieldCheck className="h-4 w-4 text-emerald-500" />
+              <ShieldCheck className="h-4 w-4 text-gold" />
               <span>Secure transaction processed by JazzCash Merchant Gateway</span>
             </div>
           </div>

@@ -16,7 +16,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "ProCV.pk — AI-Powered ATS CV Builder & Transformation Engine",
+  title: "Sophi — AI-Powered ATS CV Builder & Transformation Engine",
   description: "Pay 1500 PKR, upload your CV (PDF or Word), and receive an optimized, AI-generated CV, cover letter, LinkedIn profile hooks, and semantic gap analysis in 60 seconds.",
 };
 

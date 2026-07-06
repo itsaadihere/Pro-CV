@@ -55,6 +55,23 @@ export default function ResultPage() {
   const [sendingEmail, setSendingEmail] = useState(false)
   const [copiedText, setCopiedText] = useState<Record<string, boolean>>({})
 
+  // Template and Color Selection states
+  const [selectedTemplate, setSelectedTemplate] = useState<'ats' | 'modern' | 'minimalist'>('ats')
+  const [selectedColor, setSelectedColor] = useState<string>('classic')
+
+  // Randomly initialize template and theme on mount
+  useEffect(() => {
+    const templates = ['ats', 'modern', 'minimalist'] as const
+    const randomTemplate = templates[Math.floor(Math.random() * templates.length)]
+    
+    let defaultTheme = 'classic'
+    if (randomTemplate === 'modern') defaultTheme = 'blue'
+    else if (randomTemplate === 'minimalist') defaultTheme = 'charcoal'
+    
+    setSelectedTemplate(randomTemplate)
+    setSelectedColor(defaultTheme)
+  }, [])
+
   // Beta Feedback states
   const [rating, setRating] = useState<string | null>(null)
   const [comment, setComment] = useState('')
@@ -110,7 +127,11 @@ export default function ResultPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ jobId }),
+        body: JSON.stringify({ 
+          jobId,
+          template: selectedTemplate,
+          color: selectedColor
+        }),
       })
 
       const data = await res.json()
@@ -238,11 +259,11 @@ export default function ResultPage() {
           <div className="flex items-center gap-2">
             <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${
               jobData.status === 'completed'
-                ? 'bg-emerald-50 text-emerald-700'
-                : 'bg-amber-50 text-amber-700'
+                ? 'bg-gold-50 text-gold-700'
+                : 'bg-amber-55 bg-amber-50 text-amber-700'
             }`}>
               <span className={`h-1.5 w-1.5 rounded-full ${
-                jobData.status === 'completed' ? 'bg-emerald-500' : 'bg-amber-500'
+                jobData.status === 'completed' ? 'bg-gold' : 'bg-amber-500'
               }`} />
               {jobData.status === 'completed' ? 'Transformation Complete' : 'Processing'}
             </span>
@@ -288,6 +309,10 @@ export default function ResultPage() {
               <CVPreview
                 originalText={originalText}
                 revampedText={jobData.generated_cv || ''}
+                selectedTemplate={selectedTemplate}
+                setSelectedTemplate={setSelectedTemplate}
+                selectedColor={selectedColor}
+                setSelectedColor={setSelectedColor}
               />
             </div>
           )}
@@ -304,7 +329,7 @@ export default function ResultPage() {
                       onClick={() => handleCopySection('headline', headline)}
                       className="text-slate-400 hover:text-slate-650"
                     >
-                      {copiedText['headline'] ? <Check className="h-4 w-4 text-emerald-600" /> : <Copy className="h-4 w-4" />}
+                      {copiedText['headline'] ? <Check className="h-4 w-4 text-gold" /> : <Copy className="h-4 w-4" />}
                     </button>
                   </div>
                   <p className="text-sm font-medium text-slate-800 bg-slate-50/50 p-4 rounded-xl border border-slate-150 leading-relaxed font-mono">
@@ -312,7 +337,7 @@ export default function ResultPage() {
                   </p>
                   <div className="flex justify-between text-[11px] text-slate-400 font-bold">
                     <span>LENGTH CHECK</span>
-                    <span className={headline.length > 220 ? 'text-red-500' : 'text-emerald-600'}>
+                    <span className={headline.length > 220 ? 'text-red-500' : 'text-gold'}>
                       {headline.length} / 220 characters
                     </span>
                   </div>
@@ -348,7 +373,7 @@ export default function ResultPage() {
                     onClick={() => handleCopySection('summary', summary)}
                     className="text-slate-400 hover:text-slate-650"
                   >
-                    {copiedText['summary'] ? <Check className="h-4 w-4 text-emerald-600" /> : <Copy className="h-4 w-4" />}
+                    {copiedText['summary'] ? <Check className="h-4 w-4 text-gold" /> : <Copy className="h-4 w-4" />}
                   </button>
                 </div>
                 <pre className="text-sm text-slate-750 bg-slate-50/50 p-4 rounded-xl border border-slate-150 leading-relaxed whitespace-pre-wrap font-sans">
@@ -370,7 +395,7 @@ export default function ResultPage() {
                   onClick={() => handleCopySection('coverLetter', jobData.cover_letter || '')}
                   className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 shadow-sm transition-colors hover:bg-slate-50"
                 >
-                  {copiedText['coverLetter'] ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5" />}
+                  {copiedText['coverLetter'] ? <Check className="h-3.5 w-3.5 text-gold" /> : <Copy className="h-3.5 w-3.5" />}
                   <span>Copy Letter</span>
                 </button>
               </div>
@@ -460,24 +485,24 @@ export default function ResultPage() {
 
         {/* Beta Feedback Widget */}
         {isBetaActive() && (
-          <div className="mb-8 rounded-2xl border border-blue-200 bg-blue-50/20 p-6 shadow-sm">
+          <div className="mb-8 rounded-2xl border border-primary-200 bg-primary-50/20 p-6 shadow-sm">
             {feedbackSubmitted ? (
               <div className="flex flex-col items-center justify-center py-6 text-center space-y-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gold-100 text-gold">
                   <Check className="h-6 w-6" />
                 </div>
                 <div>
                   <h3 className="text-base font-bold text-slate-900">Thank you for your feedback!</h3>
-                  <p className="text-xs text-slate-500 mt-1">Your insights help us continuously optimize ProCV.</p>
+                  <p className="text-xs text-slate-500 mt-1">Your insights help us continuously optimize Sophi.</p>
                 </div>
               </div>
             ) : (
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-base font-bold text-blue-950 flex items-center gap-1.5">
+                  <h3 className="text-base font-bold text-primary flex items-center gap-1.5">
                     💬 You&apos;re a Beta Tester — Your Feedback Matters!
                   </h3>
-                  <p className="text-xs text-blue-800 mt-1">
+                  <p className="text-xs text-primary-800 mt-1">
                     Help us refine the CV revamped engine. Takes less than 30 seconds.
                   </p>
                 </div>
@@ -508,7 +533,7 @@ export default function ResultPage() {
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}
                     placeholder="Tell us more about your experience, suggested features or formatting quality (optional)..."
-                    className="block w-full min-h-[90px] rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-800 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"
+                    className="block w-full min-h-[90px] rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-800 placeholder-slate-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary resize-none"
                   />
                 </div>
 
@@ -517,7 +542,7 @@ export default function ResultPage() {
                     type="button"
                     onClick={handleSubmitFeedback}
                     disabled={submittingFeedback}
-                    className="flex items-center justify-center gap-1.5 rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white shadow-sm transition-all hover:bg-blue-700 hover:shadow-md disabled:bg-blue-400"
+                    className="flex items-center justify-center gap-1.5 rounded-xl bg-primary px-5 py-2.5 text-xs font-bold text-white shadow-sm transition-all hover:bg-primary-800 hover:shadow-md disabled:bg-primary-300"
                   >
                     {submittingFeedback ? (
                       <>
@@ -537,7 +562,7 @@ export default function ResultPage() {
         {/* Global sticky bottom download bar */}
         <div className="sticky bottom-6 w-full rounded-2xl border border-slate-250 bg-white p-4.5 shadow-xl shadow-slate-200/40 flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-2">
-            <div className="h-9 w-9 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600 shrink-0">
+            <div className="h-9 w-9 rounded-lg bg-primary-50 flex items-center justify-center text-primary shrink-0">
               <Download className="h-4.5 w-4.5" />
             </div>
             <div>
@@ -548,32 +573,28 @@ export default function ResultPage() {
 
           <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto justify-end">
             <a
-              href={`/api/export-pdf?jobId=${jobId}&template=ats`}
+              href={`/api/export-pdf?jobId=${jobId}&template=ats&color=classic`}
               className="flex items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-sm transition-colors hover:bg-slate-50"
+              title="Download standard plain ATS CV"
             >
-              <span>ATS-Safe PDF</span>
+              <span>ATS-Safe (Standard)</span>
             </a>
             <a
-              href={`/api/export-pdf?jobId=${jobId}&template=modern`}
-              className="flex items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-sm transition-colors hover:bg-slate-50"
+              href={`/api/export-pdf?jobId=${jobId}&template=${selectedTemplate}&color=${selectedColor}`}
+              className="flex items-center justify-center gap-1.5 rounded-lg bg-gold px-4 py-2.5 text-xs font-extrabold text-white shadow-md shadow-gold-100 hover:bg-gold-600 hover:shadow-lg hover:shadow-gold-200 transition-all"
+              title="Download PDF with your active layout & color"
             >
-              <span>Modern PDF</span>
-            </a>
-            <a
-              href={`/api/export-pdf?jobId=${jobId}&template=executive`}
-              className="flex items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-sm transition-colors hover:bg-slate-50"
-            >
-              <span>Executive PDF</span>
+              <span>Download Active Design ({selectedTemplate.toUpperCase()})</span>
             </a>
             <button
               onClick={triggerEmailResend}
               disabled={sendingEmail}
-              className="flex items-center justify-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2.5 text-xs font-bold text-white shadow-sm transition-all hover:bg-blue-700 hover:shadow-md hover:shadow-blue-100 disabled:bg-blue-400"
+              className="flex items-center justify-center gap-1.5 rounded-lg bg-primary px-4 py-2.5 text-xs font-bold text-white shadow-sm transition-all hover:bg-primary-850 hover:shadow-md hover:shadow-primary-100 disabled:bg-primary-300"
             >
               {sendingEmail ? (
                 <Loader2 className="h-3.5 w-3.5 animate-spin" />
               ) : (
-                <Mail className="h-3.5 w-3.5" />
+                <Mail className="h-3.5 w-3.5 text-gold" />
               )}
               <span>Email PDF</span>
             </button>

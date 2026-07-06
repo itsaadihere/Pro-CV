@@ -37,14 +37,14 @@ export default function BetaBanner() {
   if (!visible) return null
 
   return (
-    <div className="w-full bg-gradient-to-r from-emerald-500 via-teal-500 to-blue-600 text-white text-center py-2.5 px-4 text-xs sm:text-sm font-medium shadow-md flex flex-col sm:flex-row items-center justify-center gap-1.5 z-[100] relative">
+    <div className="w-full bg-gradient-to-r from-primary via-primary-900 to-gold text-white text-center py-2.5 px-4 text-xs sm:text-sm font-medium shadow-md flex flex-col sm:flex-row items-center justify-center gap-1.5 z-[100] relative">
       <div className="flex items-center gap-1">
         <span>🚀</span>
         <strong>FREE BETA ACCESS</strong>
         <span>— No payment needed.</span>
       </div>
       <div className="flex items-center gap-1.5">
-        <span className="bg-white/15 px-2 py-0.5 rounded text-[11px] font-bold font-mono tracking-wider shadow-inner text-emerald-55">
+        <span className="bg-white/15 px-2 py-0.5 rounded text-[11px] font-bold font-mono tracking-wider shadow-inner text-gold">
           {timeLeft}
         </span>
         <span className="opacity-75 hidden md:inline">| Share with friends while it lasts!</span>

@@ -36,7 +36,7 @@ function PaymentCallbackInner() {
   if (status === 'loading') {
     return (
       <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center bg-slate-50">
-        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
         <p className="mt-4 text-sm font-medium text-slate-500">Verifying transaction details...</p>
       </div>
     )
@@ -53,14 +53,14 @@ function PaymentCallbackInner() {
             className="space-y-6"
           >
             {/* Success Icon */}
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 shadow-sm">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gold-100 text-gold shadow-sm">
               <CheckCircle2 className="h-9 w-9" />
             </div>
 
             <div className="space-y-2">
               <h2 className="text-2xl font-bold text-slate-900">Payment Successful!</h2>
               <p className="text-sm text-slate-600 leading-relaxed">
-                Thank you for choosing ProCV. Your payment was verified, and your CV revamp slot has been unlocked.
+                Thank you for choosing Sophi. Your payment was verified, and your CV revamp slot has been unlocked.
               </p>
             </div>
 
@@ -83,10 +83,10 @@ function PaymentCallbackInner() {
             <div>
               <Link
                 href="/upload"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 py-3 text-sm font-semibold text-white transition-all hover:bg-blue-700 hover:shadow-md hover:shadow-blue-100"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3 text-sm font-bold text-white transition-all hover:bg-primary-800 hover:shadow-md hover:shadow-primary-100"
               >
                 <span>Proceed to CV Upload</span>
-                <ArrowRight className="h-4 w-4" />
+                <ArrowRight className="h-4 w-4 text-gold" />
               </Link>
             </div>
           </motion.div>
@@ -117,9 +117,9 @@ function PaymentCallbackInner() {
             <div className="flex flex-col gap-2.5">
               <Link
                 href="/payment"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 py-3 text-sm font-semibold text-white transition-all hover:bg-blue-700 hover:shadow-md"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3 text-sm font-bold text-white transition-all hover:bg-primary-850 hover:shadow-md hover:shadow-primary-100"
               >
-                <RefreshCw className="h-4 w-4" />
+                <RefreshCw className="h-4 w-4 text-gold" />
                 <span>Retry Payment</span>
               </Link>
               <Link
@@ -140,7 +140,7 @@ export default function PaymentCallbackPage() {
   return (
     <Suspense fallback={
       <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center bg-slate-50">
-        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
         <p className="mt-4 text-sm font-medium text-slate-500">Verifying transaction details...</p>
       </div>
     }>

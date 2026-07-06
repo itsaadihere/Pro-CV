@@ -51,21 +51,21 @@ export default function UploadZone({ onFileSelected, selectedFile }: UploadZoneP
         {...getRootProps()}
         className={`relative flex min-h-[220px] cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed p-6 text-center transition-all ${
           isDragActive
-            ? 'border-blue-500 bg-blue-50/50'
+            ? 'border-primary bg-primary-50/50'
             : selectedFile
-            ? 'border-emerald-500 bg-emerald-50/30'
-            : 'border-slate-300 hover:border-blue-400 hover:bg-slate-50/50'
+            ? 'border-gold bg-gold-50/30'
+            : 'border-slate-300 hover:border-primary-400 hover:bg-slate-50/50'
         }`}
       >
         <input {...getInputProps()} />
 
         {selectedFile ? (
           <div className="flex flex-col items-center animate-fade-in">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 mb-4">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gold-100 text-gold mb-4">
               <CheckCircle2 className="h-7 w-7" />
             </div>
             <p className="text-sm font-semibold text-slate-800">CV Uploaded Successfully!</p>
-            <div className="mt-3 flex items-center gap-2 rounded-lg border border-emerald-150 bg-emerald-50/60 px-3 py-1.5 text-xs text-emerald-800 font-medium">
+            <div className="mt-3 flex items-center gap-2 rounded-lg border border-gold-200 bg-gold-50/60 px-3 py-1.5 text-xs text-gold-800 font-medium">
               <FileText className="h-3.5 w-3.5" />
               <span>{selectedFile.name} ({Math.round(selectedFile.size / 1024)} KB)</span>
             </div>
@@ -73,7 +73,7 @@ export default function UploadZone({ onFileSelected, selectedFile }: UploadZoneP
           </div>
         ) : (
           <div className="flex flex-col items-center">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-50 text-blue-600 mb-4 transition-transform group-hover:scale-105">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary-50 text-primary mb-4 transition-transform group-hover:scale-105">
               <UploadCloud className="h-7 w-7" />
             </div>
             <p className="text-sm font-semibold text-slate-800">

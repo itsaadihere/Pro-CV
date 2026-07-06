@@ -26,7 +26,7 @@ export async function sendCVEmail({
   
   // Resend free tier sandbox restriction fallback
   const isLocal = appUrl.includes('localhost')
-  const fromEmail = isLocal ? 'ProCV <onboarding@resend.dev>' : 'ProCV <noreply@yourcvsite.pk>'
+  const fromEmail = isLocal ? 'Sophi <onboarding@resend.dev>' : 'Sophi <noreply@joinsophi.com>'
 
   try {
     const isBeta = isBetaActive()
@@ -34,8 +34,8 @@ export async function sendCVEmail({
       from: fromEmail,
       to: isLocal ? userEmail : userEmail, // In sandbox, userEmail must be the Resend account owner
       subject: isBeta
-        ? '🚀 Your Free Beta CV is Ready — ProCV'
-        : '✅ Your AI-Optimized CV is Ready — ProCV',
+        ? '🚀 Your Free Beta CV is Ready — Sophi'
+        : '✅ Your AI-Optimized CV is Ready — Sophi',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
           <h2 style="color: #2563eb; margin-bottom: 16px;">Your CV Transformation is Complete!</h2>
@@ -67,12 +67,12 @@ export async function sendCVEmail({
           <p style="margin-top: 24px; font-size: 14px; color: #64748b;">
             Need help? Contact our WhatsApp support at +92-XXX-XXXXXXX.
           </p>
-          <p style="margin-top: 16px; font-weight: bold; color: #475569;">— Team ProCV</p>
+          <p style="margin-top: 16px; font-weight: bold; color: #475569;">— Team Sophi</p>
         </div>
       `,
       attachments: [
         {
-          filename: 'My-ProCV-Optimized.pdf',
+          filename: 'My-Sophi-Optimized.pdf',
           content: pdfBuffer,
         },
       ],

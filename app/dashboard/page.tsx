@@ -101,7 +101,7 @@ export default function DashboardPage() {
       <div className="min-h-screen bg-slate-50">
         <Header />
         <div className="flex min-h-[400px] flex-col items-center justify-center py-24">
-          <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
           <p className="mt-4 text-sm font-medium text-slate-500">Loading your profile...</p>
         </div>
       </div>
@@ -117,7 +117,7 @@ export default function DashboardPage() {
         {/* Welcome Section */}
         <div className="grid gap-6 md:grid-cols-3 mb-8">
           <div className="md:col-span-2 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-50 text-primary">
               <Settings className="h-6 w-6" />
             </div>
             <div>
@@ -138,9 +138,9 @@ export default function DashboardPage() {
             </div>
             <Link
               href={isBetaActive() || credits > 0 ? '/upload' : '/payment'}
-              className="flex items-center gap-1 rounded-lg bg-blue-600 px-4 py-2.5 text-xs font-bold text-white transition-all hover:bg-blue-700 hover:shadow-md hover:shadow-blue-100"
+              className="flex items-center gap-1 rounded-xl bg-primary px-4 py-2.5 text-xs font-bold text-white transition-all hover:bg-primary-800 hover:shadow-md hover:shadow-primary-100"
             >
-              <PlusCircle className="h-4 w-4" />
+              <PlusCircle className="h-4 w-4 text-gold" />
               <span>{isBetaActive() || credits > 0 ? 'Revamp CV' : 'Buy Slots'}</span>
             </Link>
           </div>
@@ -168,10 +168,10 @@ export default function DashboardPage() {
               <div>
                 <Link
                   href={isBetaActive() || credits > 0 ? '/upload' : '/payment'}
-                  className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-xs font-bold text-white transition-colors hover:bg-blue-700 shadow-sm"
+                  className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-xs font-bold text-white transition-all hover:bg-primary-800 shadow-sm hover:shadow-primary-100"
                 >
                   <span>Revamp My First CV</span>
-                  <PlusCircle className="h-4 w-4" />
+                  <PlusCircle className="h-4 w-4 text-gold" />
                 </Link>
               </div>
             </div>
@@ -207,7 +207,7 @@ export default function DashboardPage() {
                         <td className="py-4.5 px-6 font-bold text-slate-800">
                           {job.status === 'completed' ? (
                             <div className="flex items-center gap-1">
-                              <TrendingUp className="h-3.5 w-3.5 text-emerald-500" />
+                              <TrendingUp className="h-3.5 w-3.5 text-gold" />
                               <span>{atsScore}/100</span>
                             </div>
                           ) : (
@@ -217,9 +217,9 @@ export default function DashboardPage() {
                         <td className="py-4.5 px-6">
                           <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold ${
                             job.status === 'completed'
-                              ? 'bg-emerald-50 text-emerald-700 border border-emerald-100'
+                              ? 'bg-gold-50 text-gold-700 border border-gold-100'
                               : job.status === 'processing'
-                              ? 'bg-blue-50 text-blue-700 border border-blue-100'
+                              ? 'bg-primary-50 text-primary border border-primary-100'
                               : 'bg-red-50 text-red-700 border border-red-100'
                           }`}>
                             {job.status}
@@ -248,10 +248,10 @@ export default function DashboardPage() {
 
       {/* Floating WhatsApp Support Action Button */}
       <a
-        href="https://wa.me/923000000000?text=I%20need%20help%20with%20my%20ProCV%20transformation"
+        href="https://wa.me/923000000000?text=I%20need%20help%20with%20my%20Sophi%20transformation"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500 text-white shadow-lg transition-transform hover:scale-105 hover:bg-emerald-600 hover:shadow-emerald-250 animate-bounce"
+        className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-gold text-white shadow-lg transition-transform hover:scale-105 hover:bg-gold-600 hover:shadow-gold-200 animate-bounce"
         title="WhatsApp Support"
       >
         <MessageSquare className="h-6 w-6" />

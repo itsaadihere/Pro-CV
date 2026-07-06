@@ -154,7 +154,7 @@ export default function AdminDashboardPage() {
             </div>
             <h2 className="mt-4 text-base font-bold text-slate-900">Access Denied</h2>
             <p className="mt-2 text-xs text-slate-500 leading-relaxed">
-              You do not have administrative privileges to view this page. Restricted to ProCV site administrator accounts only.
+              You do not have administrative privileges to view this page. Restricted to Sophi site administrator accounts only.
             </p>
             <Link
               href="/dashboard"
@@ -206,7 +206,7 @@ export default function AdminDashboardPage() {
               <span className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider">CVs Generated</span>
               <span className="block text-3xl font-extrabold text-slate-950">{stats.totalBetaCVs}</span>
             </div>
-            <div className="h-12 w-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+            <div className="h-12 w-12 rounded-xl bg-primary-50 text-primary flex items-center justify-center">
               <FileText className="h-6 w-6" />
             </div>
           </div>
@@ -264,7 +264,7 @@ export default function AdminDashboardPage() {
                 </div>
                 <div className="h-2 w-full rounded-full bg-slate-100 overflow-hidden">
                   <div 
-                    className="h-full bg-emerald-500 rounded-full" 
+                    className="h-full bg-gold rounded-full" 
                     style={{ width: `${stats.totalBetaCVs > 0 ? (stats.ratingCounts.good / feedbacks.length) * 100 : 0}%` }}
                   />
                 </div>

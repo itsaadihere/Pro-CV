@@ -66,7 +66,7 @@ create or replace trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();
 
--- Pro-CV Beta Mode Schema Extensions
+-- Sophi Beta Mode Schema Extensions
 alter table public.profiles
   add column if not exists is_beta_user boolean default false;
 

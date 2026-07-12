@@ -34,6 +34,10 @@ import M29WhiteBeigeMinimaistGraphic from './modern/M29WhiteBeigeMinimaistGraphi
 import M30WhiteGreenSimpleStudent from './modern/M30WhiteGreenSimpleStudent';
 import M31WhiteSimpleStudent3 from './modern/M31WhiteSimpleStudent3';
 import M32BlueMinimalistModern from './modern/M32BlueMinimalistModern';
+import M33CreativeTealSidebar from './modern/M33CreativeTealSidebar';
+import M34CreativeAmethystHeader from './modern/M34CreativeAmethystHeader';
+import M35CreativeAmberGeometric from './modern/M35CreativeAmberGeometric';
+import M36CreativeCoralModernist from './modern/M36CreativeCoralModernist';
 import MIN01BlackWhiteMinimalistAccountant from './minimalist/MIN01BlackWhiteMinimalistAccountant';
 import MIN02BlackWhiteSimpleInfographic from './minimalist/MIN02BlackWhiteSimpleInfographic';
 import MIN03BlackWhiteSimpleMinimalist from './minimalist/MIN03BlackWhiteSimpleMinimalist';
@@ -86,6 +90,10 @@ export const TEMPLATE_REGISTRY: Record<string, React.ComponentType<any>> = {
   'm-30-white-green-simple-student': M30WhiteGreenSimpleStudent,
   'm-31-white-simple-student-3': M31WhiteSimpleStudent3,
   'm-32-blue-minimalist-modern': M32BlueMinimalistModern,
+  'm-33-creative-teal-sidebar': M33CreativeTealSidebar,
+  'm-34-creative-amethyst-header': M34CreativeAmethystHeader,
+  'm-35-creative-amber-geometric': M35CreativeAmberGeometric,
+  'm-36-creative-coral-modernist': M36CreativeCoralModernist,
   'min-01-black-white-minimalist-accountant': MIN01BlackWhiteMinimalistAccountant,
   'min-02-black-white-simple-infographic': MIN02BlackWhiteSimpleInfographic,
   'min-03-black-white-simple-minimalist': MIN03BlackWhiteSimpleMinimalist,

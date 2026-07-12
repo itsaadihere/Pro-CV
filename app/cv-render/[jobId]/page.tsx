@@ -7,7 +7,7 @@ export default async function CVRenderPage({
   searchParams
 }: {
   params: { jobId: string }
-  searchParams: { template: string }
+  searchParams: { template: string; color?: string }
 }) {
   const supabase = getServiceSupabase()
   const { data: job } = await supabase
@@ -39,7 +39,7 @@ export default async function CVRenderPage({
         `}</style>
       </head>
       <body>
-        <TemplateComponent data={cvData} scale={1} />
+        <TemplateComponent data={cvData} scale={1} colorTheme={searchParams.color} />
       </body>
     </html>
   )

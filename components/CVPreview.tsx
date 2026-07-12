@@ -138,6 +138,43 @@ export default function CVPreview({
             </div>
           )}
 
+          {/* Color Switcher */}
+          {viewMode === 'visual' && activeTab === 'after' && (
+            (() => {
+              const category = selectedTemplate === 'ats' 
+                ? 'ats' 
+                : (selectedTemplate === 'minimalist' || selectedTemplate.startsWith('min-')) 
+                  ? (selectedTemplate.includes('ats') ? 'ats' : 'minimalist') 
+                  : 'modern';
+              const activeColors = colorOptions[category];
+              if (!activeColors) return null;
+              return (
+                <div className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 shadow-sm">
+                  <span className="text-slate-500">Color Palette:</span>
+                  <div className="flex items-center gap-1.5">
+                    {activeColors.map((color) => (
+                      <button
+                        key={color.id}
+                        onClick={() => setSelectedColor(color.id)}
+                        className={`h-4.5 w-4.5 rounded-full border flex items-center justify-center transition-all ${
+                          selectedColor === color.id
+                            ? 'ring-2 ring-primary ring-offset-1 border-transparent scale-110'
+                            : 'border-slate-300 hover:scale-105'
+                        }`}
+                        style={{ backgroundColor: color.hex, width: '18px', height: '18px' }}
+                        title={color.name}
+                      >
+                        {selectedColor === color.id && (
+                          <span className="h-1 w-1 rounded-full bg-white shadow-sm" />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              );
+            })()
+          )}
+
           {/* Layout split trigger for desktop */}
           <div className="hidden rounded-lg border border-slate-200 bg-white p-1 md:flex">
             <button
@@ -285,7 +322,7 @@ function VisualCV({
   return (
     <div className="w-full overflow-y-auto max-h-[600px] flex justify-center bg-slate-100 p-4 border border-slate-200 rounded-b-2xl">
       <div style={{ transform: 'scale(0.6)', transformOrigin: 'top center', height: '674px', overflow: 'hidden' }}>
-        <TemplateComponent data={cvData} scale={0.6} />
+        <TemplateComponent data={cvData} scale={0.6} colorTheme={colorTheme} />
       </div>
     </div>
   )

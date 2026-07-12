@@ -34,6 +34,10 @@ export class TemplateRotationEngine {
     'm-30-white-green-simple-student',
     'm-31-white-simple-student-3',
     'm-32-blue-minimalist-modern',
+    'm-33-creative-teal-sidebar',
+    'm-34-creative-amethyst-header',
+    'm-35-creative-amber-geometric',
+    'm-36-creative-coral-modernist',
   ]
 
   private readonly MINIMALIST_TEMPLATES = [

@@ -32,7 +32,7 @@ async function getBrowserInstance() {
 
 export async function POST(req: NextRequest) {
   try {
-    const { jobId, templateId } = await req.json()
+    const { jobId, templateId, color } = await req.json()
 
     if (!jobId || !templateId) {
       return NextResponse.json({ error: 'Missing jobId or templateId' }, { status: 400 })
@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
     const protocol = host.includes('localhost') ? 'http' : 'https'
     const appUrl = `${protocol}://${host}`
 
-    const renderUrl = `${appUrl}/cv-render/${jobId}?template=${templateId}`
+    const renderUrl = `${appUrl}/cv-render/${jobId}?template=${templateId}${color ? `&color=${color}` : ''}`
     console.log('Puppeteer navigating to render URL:', renderUrl)
     
     await page.goto(renderUrl, { waitUntil: 'networkidle0' })
@@ -135,6 +135,7 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url)
     const jobId = searchParams.get('jobId')
     let templateId = searchParams.get('template')
+    const color = searchParams.get('color')
 
     if (!jobId) {
       return NextResponse.json({ error: 'Missing jobId parameter' }, { status: 400 })
@@ -172,7 +173,7 @@ export async function GET(req: NextRequest) {
     const protocol = host.includes('localhost') ? 'http' : 'https'
     const appUrl = `${protocol}://${host}`
 
-    const renderUrl = `${appUrl}/cv-render/${jobId}?template=${templateId}`
+    const renderUrl = `${appUrl}/cv-render/${jobId}?template=${templateId}${color ? `&color=${color}` : ''}`
     await page.goto(renderUrl, { waitUntil: 'networkidle0' })
 
     const pdfBuffer = await page.pdf({

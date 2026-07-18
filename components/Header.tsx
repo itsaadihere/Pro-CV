@@ -85,6 +85,15 @@ export default function Header() {
         {/* Navigation / Actions */}
         {!isAuthPage && (
           <div className="flex items-center gap-4">
+            <Link
+              href="/blog"
+              className={`hidden text-sm font-bold transition-colors md:block ${
+                pathname.startsWith('/blog') ? 'text-primary' : 'text-slate-650 hover:text-primary-800'
+              }`}
+            >
+              Blog
+            </Link>
+            
             {user ? (
               <>
                 <Link

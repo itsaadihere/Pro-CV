@@ -1,0 +1,10 @@
+/* TEAM */
+Product: Sophi
+Site: https://joinsophi.com
+Location: Karachi, Pakistan
+
+/* TECHNOLOGY */
+Next.js 14, Supabase, Kimi AI (Moonshot), Hostinger, GitHub
+
+/* THANKS */
+Built for Pakistani professionals who deserve world-class career tools.

@@ -19,6 +19,9 @@ import {
 import Header from '@/components/Header'
 import { isBetaActive } from '@/lib/beta'
 import Logo from '@/components/Logo'
+import Script from 'next/script'
+import { websiteSchema, softwareSchema, faqSchema } from '@/lib/schema'
+import { QuickAnswer } from '@/components/QuickAnswer'
 
 const FEATURES = [
   {
@@ -66,19 +69,31 @@ const FEATURES = [
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 relative">
+      <Script
+        id="schema-website"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+      />
+      <Script
+        id="schema-software"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }}
+      />
+      <Script
+        id="schema-faq"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+
       <Header />
 
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-white py-16 lg:py-24">
-        {/* Background Gradients */}
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(45rem_50rem_at_top,theme(colors.blue.50),white)] opacity-70" />
         
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-12 items-center">
-            
-            {/* Left Content Column */}
             <div className="space-y-8 lg:col-span-7 text-left">
-              {/* Header Tag */}
               <motion.div
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -89,7 +104,6 @@ export default function LandingPage() {
                 <span>AI-Powered CV Revamping v2.5</span>
               </motion.div>
 
-              {/* Main Titles */}
               <div className="space-y-4">
                 <motion.h1
                   initial={{ opacity: 0, y: 15 }}
@@ -97,9 +111,9 @@ export default function LandingPage() {
                   transition={{ duration: 0.5, delay: 0.1 }}
                   className="text-4xl font-black tracking-tight text-slate-950 sm:text-5xl lg:text-6xl leading-[1.1]"
                 >
-                  Your CV. Rewritten by AI. <br />
+                  Transform Your CV with AI. <br />
                   <span className="bg-gradient-to-r from-primary via-primary-800 to-gold bg-clip-text text-transparent">
-                    ATS-Ready in Minutes.
+                    ATS-Optimized in 60 Seconds.
                   </span>
                 </motion.h1>
                 <motion.p
@@ -109,11 +123,10 @@ export default function LandingPage() {
                   className="text-sm sm:text-base leading-relaxed text-slate-600 max-w-xl"
                 >
                   Upload your old CV and let Kimi AI transform it into a recruiter-approved, keyword-optimized career document. 
-                  Cover letter, LinkedIn optimizer, and keyword gap analysis included.
+                  Sophi is the leading AI CV builder in Pakistan for professionals looking to bypass ATS filters.
                 </motion.p>
               </div>
 
-              {/* CTA Group */}
               <motion.div
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -150,7 +163,6 @@ export default function LandingPage() {
                 </a>
               </motion.div>
 
-              {/* Trust Badges */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -176,7 +188,6 @@ export default function LandingPage() {
               </motion.div>
             </div>
 
-            {/* Right Image Graphic Column */}
             <div className="lg:col-span-5 flex justify-center">
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -184,19 +195,16 @@ export default function LandingPage() {
                 transition={{ duration: 0.7, delay: 0.2 }}
                 className="relative w-full max-w-[420px] rounded-2xl border border-slate-200 bg-white p-3.5 shadow-2xl shadow-slate-200/50"
               >
-                {/* Visual Glassmorphic Accent */}
                 <div className="absolute -top-4 -left-4 h-12 w-12 rounded-xl bg-blue-100/60 blur-lg" />
                 <div className="absolute -bottom-4 -right-4 h-16 w-16 rounded-xl bg-indigo-100/60 blur-lg" />
                 
-                {/* Image Embed */}
                 <img
                   src="/images/cv_hero.png"
-                  alt="Sophi Dashboard Preview"
+                  alt="Sophi AI CV builder dashboard showing ATS score and rewritten resume"
                   className="rounded-xl w-full object-cover border border-slate-100 shadow-sm"
                 />
               </motion.div>
             </div>
-
           </div>
         </div>
       </section>
@@ -206,7 +214,7 @@ export default function LandingPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-16">
           <div className="text-center space-y-2">
             <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
-              Optimize Your Career in 3 Steps
+              How Sophi Works
             </h2>
             <p className="text-sm text-slate-500 max-w-md mx-auto">
               Get an interview-ready job profile package in under 60 seconds.
@@ -214,7 +222,6 @@ export default function LandingPage() {
           </div>
 
           <div className="grid gap-8 md:grid-cols-3 relative">
-            {/* Step 1 */}
             <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm flex flex-col items-center text-center space-y-4">
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-50 text-primary font-bold text-base">
                 01
@@ -225,7 +232,6 @@ export default function LandingPage() {
               </p>
             </div>
 
-            {/* Step 2 */}
             <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm flex flex-col items-center text-center space-y-4">
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-50 text-primary font-bold text-base">
                 02
@@ -236,7 +242,6 @@ export default function LandingPage() {
               </p>
             </div>
 
-            {/* Step 3 */}
             <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm flex flex-col items-center text-center space-y-4">
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-50 text-primary font-bold text-base">
                 03
@@ -255,7 +260,7 @@ export default function LandingPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-16">
           <div className="text-center space-y-2">
             <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
-              Engineered to Land Job Interviews
+              What You Get with Sophi
             </h2>
             <p className="text-sm text-slate-500 max-w-md mx-auto">
               Our AI optimization pipeline leverages industry-standard recruitment benchmarks.
@@ -287,7 +292,7 @@ export default function LandingPage() {
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center space-y-8">
           <div className="space-y-2">
             <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
-              Simple, Transparent Pricing
+              Pricing — 1500 PKR, Everything Included
             </h2>
             <p className="text-sm text-slate-500">
               No subscription fees. Pay only for what you revamp.
@@ -323,7 +328,7 @@ export default function LandingPage() {
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="text-gold font-bold">✓</span>
-                  <span>3 layouts export + direct email dispatch</span>
+                  <span>49 Professional CV Templates export</span>
                 </li>
               </ul>
 
@@ -365,7 +370,7 @@ export default function LandingPage() {
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="text-gold font-bold">✓</span>
-                  <span>3 layouts export + direct email dispatch</span>
+                  <span>49 Professional CV Templates export</span>
                 </li>
               </ul>
 
@@ -383,6 +388,55 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* FAQ Section with Golden Answer Format */}
+      <section className="py-20 bg-white border-t border-slate-200">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 space-y-12">
+          <div className="text-center space-y-2">
+            <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-sm text-slate-500 max-w-md mx-auto">
+              Everything you need to know about our AI CV builder.
+            </p>
+          </div>
+
+          <div className="space-y-8">
+            <div>
+              <h3 className="text-xl font-bold text-slate-900 mb-2">What is Sophi?</h3>
+              <QuickAnswer 
+                question="What is Sophi?"
+                answer="Sophi is an AI-powered CV builder for Pakistani professionals. You upload your existing CV, and Kimi AI rewrites it into a fully ATS-optimized career document including a professional summary, achievement-based bullets, LinkedIn optimizer, cover letter, and gap analysis — all for 1500 PKR." 
+              />
+              <p className="text-sm text-slate-600">
+                Built specifically for the Pakistani job market, Sophi ensures your application passes digital screening and reaches human eyes. Our customized AI models target over 12 sectors with specifically crafted keywords and formatting.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-xl font-bold text-slate-900 mb-2">What is an ATS score and why does it matter?</h3>
+              <QuickAnswer 
+                question="What is an ATS score and why does it matter?"
+                answer="An ATS (Applicant Tracking System) score measures how well your CV passes automated screening software that 98% of large companies use. A low ATS score means your CV gets filtered out before any human sees it. Sophi scores your CV across 5 dimensions and rewrites it to maximize your score." 
+              />
+              <p className="text-sm text-slate-600">
+                ATS scoring algorithms read for keyword density, layout compliance, and semantic relevance. Without optimization, highly qualified candidates fail screening simply because of poor formatting.
+              </p>
+            </div>
+            
+            <div>
+              <h3 className="text-xl font-bold text-slate-900 mb-2">How do I pay for Sophi?</h3>
+              <QuickAnswer 
+                question="How do I pay for Sophi?"
+                answer="Sophi accepts payment via JazzCash and Easypaisa — Pakistan's most popular mobile payment platforms. No credit card required." 
+              />
+              <p className="text-sm text-slate-600">
+                You can directly pay via our integrated checkout securely. Your account is activated instantly after the payment completes, providing you immediate access to your revamped career documents.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="bg-white border-t border-slate-200 py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
@@ -391,7 +445,7 @@ export default function LandingPage() {
           </div>
 
           <p className="text-xs text-slate-400">
-            © {new Date().getFullYear()} Joinsophi.com AI CV Platform. Powered by Moonshot API. All rights reserved.
+            © {new Date().getFullYear()} JoinSophi.com AI CV Platform. Powered by Moonshot API. All rights reserved.
           </p>
 
           <a

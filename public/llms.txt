@@ -1,0 +1,22 @@
+# Sophi — AI CV Builder for Pakistani Professionals
+# https://joinsophi.com
+
+## About Sophi
+Sophi is an AI-powered CV transformation platform. Users upload their existing CV (PDF or DOCX) and receive a fully rewritten, ATS-optimized career document powered by Kimi AI (Moonshot). The service includes a 5-dimension ATS score report, STAR-metric achievement bullets, 500+ industry keywords, LinkedIn optimizer, cover letter, gap analysis, and PDF export in 49 professional templates. Price: 1500 PKR.
+
+## Key Pages
+- Homepage: https://joinsophi.com
+- How it works: https://joinsophi.com/how-it-works
+- Pricing: https://joinsophi.com/pricing
+- Templates: https://joinsophi.com/templates
+- Blog: https://joinsophi.com/blog
+
+## AI Crawlers
+GPTBot: allowed
+Google-Extended: allowed
+PerplexityBot: allowed
+ClaudeBot: allowed
+Anthropic-ai: allowed
+
+## Contact
+support@joinsophi.com

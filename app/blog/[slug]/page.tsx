@@ -6,7 +6,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import Script from 'next/script';
 import { blogPostSchema } from '@/lib/schema';
-import { ArrowLeft, ChevronRight } from 'lucide-react';
+import { ArrowLeft, ChevronRight, Facebook, Twitter, Linkedin, MessageCircle } from 'lucide-react';
 
 export const revalidate = 3600;
 
@@ -106,6 +106,24 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
               className="prose prose-lg prose-slate max-w-none prose-headings:font-bold prose-a:text-primary hover:prose-a:text-primary-800"
               dangerouslySetInnerHTML={{ __html: post.content }}
             />
+
+            <div className="mt-12 pt-8 border-t border-slate-100">
+              <h4 className="text-sm font-bold text-slate-900 mb-4 uppercase tracking-wider">Share this article</h4>
+              <div className="flex gap-4">
+                <a href={`https://www.facebook.com/sharer/sharer.php?u=https://joinsophi.com/blog/${post.slug}`} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                  <Facebook className="w-5 h-5" />
+                </a>
+                <a href={`https://twitter.com/intent/tweet?url=https://joinsophi.com/blog/${post.slug}&text=${encodeURIComponent(post.title)}`} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center hover:bg-sky-50 hover:text-sky-500 transition-colors">
+                  <Twitter className="w-5 h-5" />
+                </a>
+                <a href={`https://www.linkedin.com/shareArticle?mini=true&url=https://joinsophi.com/blog/${post.slug}&title=${encodeURIComponent(post.title)}`} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center hover:bg-blue-50 hover:text-blue-700 transition-colors">
+                  <Linkedin className="w-5 h-5" />
+                </a>
+                <a href={`https://api.whatsapp.com/send?text=${encodeURIComponent(post.title + ' https://joinsophi.com/blog/' + post.slug)}`} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center hover:bg-green-50 hover:text-green-600 transition-colors">
+                  <MessageCircle className="w-5 h-5" />
+                </a>
+              </div>
+            </div>
           </div>
         </article>
 

@@ -5,7 +5,7 @@ export const organizationSchema = {
   "alternateName": "JoinSophi",
   "url": "https://joinsophi.com",
   "logo": "https://joinsophi.com/logo.png",
-  "description": "AI-powered CV builder for Pakistani professionals. ATS-optimized resumes, cover letters, and LinkedIn optimization powered by Kimi AI.",
+  "description": "AI-powered CV builder for Pakistani professionals. ATS-optimized resumes, cover letters, and LinkedIn optimization powered by advanced AI.",
   "foundingDate": "2024",
   "contactPoint": {
     "@type": "ContactPoint",
@@ -56,7 +56,7 @@ export const softwareSchema = {
   },
   "featureList": [
     "ATS Score Analysis (5 dimensions)",
-    "AI CV Rewriting powered by Kimi AI",
+    "AI CV Rewriting powered by advanced AI",
     "Keyword Intelligence (12 industries, 500+ keywords)",
     "LinkedIn Profile Optimizer",
     "AI Cover Letter Generator",
@@ -77,7 +77,7 @@ export const faqSchema = {
       "name": "What is Sophi?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Sophi is an AI-powered CV builder for Pakistani professionals. You upload your existing CV, and Kimi AI rewrites it into a fully ATS-optimized career document including a professional summary, achievement-based bullets, LinkedIn optimizer, cover letter, and gap analysis — all for 1500 PKR."
+        "text": "Sophi is an AI-powered CV builder for Pakistani professionals. You upload your existing CV, and our AI rewrites it into a fully ATS-optimized career document including a professional summary, achievement-based bullets, LinkedIn optimizer, cover letter, and gap analysis — all for 1500 PKR."
       }
     },
     {
@@ -85,7 +85,7 @@ export const faqSchema = {
       "name": "How does Sophi's AI improve my CV?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Sophi uses Kimi AI (moonshot-v1-32k) to analyze your existing CV across 5 ATS dimensions: keyword density, formatting compliance, semantic relevance, skills alignment, and achievement clarity. It then rewrites every bullet using the STAR-Metric formula, injects 500+ industry-specific keywords, and generates a 2026-formula professional summary."
+        "text": "Sophi uses advanced AI to analyze your existing CV across 5 ATS dimensions: keyword density, formatting compliance, semantic relevance, skills alignment, and achievement clarity. It then rewrites every bullet using the STAR-Metric formula, injects 500+ industry-specific keywords, and generates a 2026-formula professional summary."
       }
     },
     {

@@ -17,7 +17,7 @@ export default function HowItWorksPage() {
             How Sophi Transforms Your CV in 3 Simple Steps
           </h1>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            See exactly how Sophi transforms your old CV into an ATS-optimized career document using Kimi AI.
+            See exactly how Sophi transforms your old CV into an ATS-optimized career document using advanced AI.
           </p>
         </div>
 

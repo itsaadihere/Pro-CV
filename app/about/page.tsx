@@ -32,7 +32,7 @@ export default function AboutPage() {
             
             <h2>Our Solution</h2>
             <p>
-              Sophi is an AI-powered CV transformation engine tailored specifically for the Pakistani and Gulf job markets. Using Kimi AI (Moonshot), we reverse-engineer the ATS screening process. Our engine rewrites your existing CV with precise keyword density, STAR-metric achievement bullets, and semantic relevance to ensure you bypass digital filters.
+              Sophi is an AI-powered CV transformation engine tailored specifically for the Pakistani and Gulf job markets. Using advanced AI, we reverse-engineer the ATS screening process. Our engine rewrites your existing CV with precise keyword density, STAR-metric achievement bullets, and semantic relevance to ensure you bypass digital filters.
             </p>
 
             <div className="bg-primary-50 p-6 rounded-2xl border border-primary-100 my-8">

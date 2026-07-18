@@ -200,9 +200,9 @@ export default function CVPreview({
 
         <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
           {viewMode === 'visual' && activeTab === 'after' && (
-            <div className="flex items-center gap-1.5 rounded-full bg-primary-50 border border-primary-100 px-2.5 py-1 text-[10px] font-bold text-primary shadow-sm animate-fade-in" title="Optimized using Google Gemini AI">
+            <div className="flex items-center gap-1.5 rounded-full bg-primary-50 border border-primary-100 px-2.5 py-1 text-[10px] font-bold text-primary shadow-sm animate-fade-in" title="Optimized using AI">
               <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-              <span>Gemini AI Active</span>
+              <span>AI Layout Active</span>
             </div>
           )}
           <button
@@ -245,7 +245,7 @@ export default function CVPreview({
                     <span>Visual Preview: {selectedTemplate} layout</span>
                   </>
                 ) : (
-                  <span>Optimized by Kimi AI</span>
+                  <span>Optimized by AI</span>
                 )}
               </span>
               <button
@@ -261,7 +261,7 @@ export default function CVPreview({
                 {formatting && (
                   <div className="absolute inset-0 bg-white/60 backdrop-blur-[1px] z-10 flex flex-col items-center justify-center gap-2 rounded-2xl animate-fade-in">
                     <Loader2 className="h-7 w-7 text-primary animate-spin" />
-                    <span className="text-[11px] font-bold text-slate-500">Gemini AI is structuring layout...</span>
+                    <span className="text-[11px] font-bold text-slate-500">AI is structuring layout...</span>
                   </div>
                 )}
                 <VisualCV cvText={displayCVText} template={selectedTemplate} colorTheme={selectedColor} />
@@ -289,7 +289,7 @@ export default function CVPreview({
               {formatting && (
                 <div className="absolute inset-0 bg-white/60 backdrop-blur-[1px] z-10 flex flex-col items-center justify-center gap-2 rounded-2xl animate-fade-in">
                   <Loader2 className="h-7 w-7 text-emerald-600 animate-spin" />
-                  <span className="text-[11px] font-bold text-slate-500">Gemini AI is structuring layout...</span>
+                  <span className="text-[11px] font-bold text-slate-500">AI is structuring layout...</span>
                 </div>
               )}
               <VisualCV cvText={displayCVText} template={selectedTemplate} colorTheme={selectedColor} />

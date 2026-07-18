@@ -122,7 +122,7 @@ export default function LandingPage() {
                   transition={{ duration: 0.5, delay: 0.2 }}
                   className="text-sm sm:text-base leading-relaxed text-slate-600 max-w-xl"
                 >
-                  Upload your old CV and let Kimi AI transform it into a recruiter-approved, keyword-optimized career document. 
+                  Upload your old CV and let advanced AI transform it into a recruiter-approved, keyword-optimized career document. 
                   Sophi is the leading AI CV builder in Pakistan for professionals looking to bypass ATS filters.
                 </motion.p>
               </div>
@@ -175,7 +175,7 @@ export default function LandingPage() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Sparkles className="h-4.5 w-4.5 text-gold shrink-0" />
-                  <span>Kimi AI Powered</span>
+                  <span>AI Powered</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Download className="h-4.5 w-4.5 text-gold shrink-0" />
@@ -312,7 +312,7 @@ export default function LandingPage() {
               <ul className="mt-6 space-y-3.5 text-left border-t border-slate-100 pt-6 text-xs text-slate-655 font-semibold">
                 <li className="flex items-center gap-2">
                   <span className="text-gold font-bold">✓</span>
-                  <span>Kimi AI Revamped CV (ATS-optimized)</span>
+                  <span>AI Revamped CV (ATS-optimized)</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="text-gold font-bold">✓</span>
@@ -354,7 +354,7 @@ export default function LandingPage() {
               <ul className="mt-6 space-y-3.5 text-left border-t border-slate-100 pt-6 text-xs text-slate-600 font-semibold">
                 <li className="flex items-center gap-2">
                   <span className="text-gold font-bold">✓</span>
-                  <span>Kimi AI Revamped CV (ATS-optimized)</span>
+                  <span>AI Revamped CV (ATS-optimized)</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="text-gold font-bold">✓</span>
@@ -405,7 +405,7 @@ export default function LandingPage() {
               <h3 className="text-xl font-bold text-slate-900 mb-2">What is Sophi?</h3>
               <QuickAnswer 
                 question="What is Sophi?"
-                answer="Sophi is an AI-powered CV builder for Pakistani professionals. You upload your existing CV, and Kimi AI rewrites it into a fully ATS-optimized career document including a professional summary, achievement-based bullets, LinkedIn optimizer, cover letter, and gap analysis — all for 1500 PKR." 
+                answer="Sophi is an AI-powered CV builder for Pakistani professionals. You upload your existing CV, and our AI rewrites it into a fully ATS-optimized career document including a professional summary, achievement-based bullets, LinkedIn optimizer, cover letter, and gap analysis — all for 1500 PKR." 
               />
               <p className="text-sm text-slate-600">
                 Built specifically for the Pakistani job market, Sophi ensures your application passes digital screening and reaches human eyes. Our customized AI models target over 12 sectors with specifically crafted keywords and formatting.

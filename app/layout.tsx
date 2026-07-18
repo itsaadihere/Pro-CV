@@ -24,11 +24,11 @@ export const metadata: Metadata = {
     default: 'Sophi — AI CV Builder Pakistan | ATS-Optimized Resume in Minutes',
     template: '%s | Sophi — AI CV Builder'
   },
-  description: 'Upload your CV, let Kimi AI rewrite it into an ATS-optimized career document. Professional CV, cover letter & LinkedIn optimizer. Just 1500 PKR.',
+  description: 'Upload your CV, let advanced AI rewrite it into an ATS-optimized career document. Professional CV, cover letter & LinkedIn optimizer. Just 1500 PKR.',
   keywords: [
     'AI CV builder Pakistan', 'ATS resume builder', 'CV maker online Pakistan',
     'professional CV writer', 'ATS optimized resume', 'AI resume writer',
-    'CV optimization', 'Kimi AI resume', 'JoinSophi', 'Sophi CV'
+    'CV optimization', 'AI resume', 'JoinSophi', 'Sophi CV'
   ],
   authors: [{ name: 'Sophi', url: 'https://joinsophi.com' }],
   creator: 'Sophi',

@@ -37,7 +37,7 @@ export default function PaymentGate({ credits, loading, children }: PaymentGateP
             CV Transformation Lock
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-slate-600">
-            You do not have any active transformation credits. Unlock Kimi AI powered revamp, 
+            You do not have any active transformation credits. Unlock advanced AI powered revamp, 
             ATS keyword score card, LinkedIn summary optimization, cover letter, and gap analysis for just 1500 PKR.
           </p>
 

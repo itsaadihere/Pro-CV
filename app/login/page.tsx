@@ -96,7 +96,7 @@ export default function LoginPage() {
           </h2>
           <p className="mt-2 text-xs font-medium text-slate-500">
             {isSignUp
-              ? 'Start optimizing your CV with Kimi AI for free.'
+              ? 'Start optimizing your CV with advanced AI for free.'
               : 'Enter your credentials below to log in.'}
           </p>
         </div>

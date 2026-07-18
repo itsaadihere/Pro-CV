@@ -151,7 +151,7 @@ export default function ATSCheckerPage() {
               <div className="bg-primary p-8 rounded-2xl text-white shadow-xl">
                 <h3 className="text-xl font-bold mb-2">Fix Your CV Instantly</h3>
                 <p className="text-sm text-primary-100 mb-6">
-                  Don't let algorithms reject your application. Let Sophi's Kimi AI completely rewrite and optimize your CV to score 90+ on ATS tests.
+                  Don't let algorithms reject your application. Let Sophi's AI completely rewrite and optimize your CV to score 90+ on ATS tests.
                 </p>
                 <div className="flex flex-col sm:flex-row items-center gap-4">
                   <Link href="/login" className="w-full sm:w-auto px-8 py-3 bg-white text-primary font-bold rounded-xl hover:bg-slate-50 transition-colors text-center">

@@ -36,7 +36,7 @@ const LANGUAGES = [
 const PIPELINE_STEPS = [
   { id: 1, label: 'Uploading original CV file...' },
   { id: 2, label: 'Extracting text and formatting...' },
-  { id: 3, label: 'Kimi AI rewriting & ATS scoring...' },
+  { id: 3, label: 'AI rewriting & ATS scoring...' },
   { id: 4, label: 'Generating PDF templates...' },
   { id: 5, label: 'Sending copy to your email...' },
 ]
@@ -159,7 +159,7 @@ export default function UploadPage() {
 
       const cvText = parseData.text
 
-      // Step 4: Generate CV using Kimi AI
+      // Step 4: Generate CV using AI
       setCurrentStep(3)
       setProgressPercent(60)
 
@@ -180,7 +180,7 @@ export default function UploadPage() {
 
       const generateData = await generateRes.json()
       if (!generateRes.ok || !generateData.success) {
-        throw new Error(generateData.error || 'Kimi AI optimization failed.')
+        throw new Error(generateData.error || 'AI optimization failed.')
       }
 
       // Step 5: Generating PDF template
@@ -245,7 +245,7 @@ export default function UploadPage() {
                 Transform Your CV
               </h1>
               <p className="mt-2 text-sm text-slate-600">
-                Configure your career preferences below and upload your current CV. Kimi AI will handle the rest.
+                Configure your career preferences below and upload your current CV. Our AI will handle the rest.
               </p>
             </div>
 
@@ -326,7 +326,7 @@ export default function UploadPage() {
                     </div>
                     <div>
                       <p className="text-xs text-slate-500 mb-3">
-                        Paste the target job posting to allow Kimi AI to run a custom semantic keywords gap analysis and tailor your experience bullet points specifically to this job description.
+                        Paste the target job posting to allow our AI to run a custom semantic keywords gap analysis and tailor your experience bullet points specifically to this job description.
                       </p>
                       <textarea
                         value={jobDescription}

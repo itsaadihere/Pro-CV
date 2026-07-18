@@ -56,10 +56,11 @@ export default function ATSCheckerPage() {
             animate={{ opacity: 1, y: 0 }}
             className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200"
           >
-            <label className="block text-sm font-bold text-slate-700 mb-2">
+            <label htmlFor="cvText" className="block text-sm font-bold text-slate-700 mb-2">
               Paste your CV content here (text only)
             </label>
             <textarea
+              id="cvText"
               className="w-full h-64 p-4 border border-slate-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary outline-none resize-none"
               placeholder="Experience: Software Engineer at Tech Corp..."
               value={text}

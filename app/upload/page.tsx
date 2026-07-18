@@ -325,10 +325,11 @@ export default function UploadPage() {
                       <span>Target Job Description (Optional)</span>
                     </div>
                     <div>
-                      <p className="text-xs text-slate-500 mb-3">
+                      <label htmlFor="jobDescription" className="block text-xs text-slate-500 mb-3">
                         Paste the target job posting to allow our AI to run a custom semantic keywords gap analysis and tailor your experience bullet points specifically to this job description.
-                      </p>
+                      </label>
                       <textarea
+                        id="jobDescription"
                         value={jobDescription}
                         onChange={(e) => setJobDescription(e.target.value)}
                         placeholder="Paste job title, responsibilities, requirements, and keywords here..."
@@ -347,10 +348,11 @@ export default function UploadPage() {
 
                     {/* Target Industry */}
                     <div className="space-y-2">
-                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider">
+                      <label htmlFor="industry" className="block text-xs font-bold text-slate-500 uppercase tracking-wider">
                         Target Industry
                       </label>
                       <select
+                        id="industry"
                         value={industry}
                         onChange={(e) => setIndustry(e.target.value)}
                         className="block w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-800 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
@@ -365,10 +367,11 @@ export default function UploadPage() {
 
                     {/* Output Language */}
                     <div className="space-y-2">
-                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider">
+                      <label htmlFor="language" className="block text-xs font-bold text-slate-500 uppercase tracking-wider">
                         Output Language
                       </label>
                       <select
+                        id="language"
                         value={language}
                         onChange={(e) => setLanguage(e.target.value)}
                         className="block w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-800 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"

@@ -20,7 +20,7 @@ export default function ChatPage() {
   const [loading, setLoading] = useState(true)
   
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: 'Hi there! I am Gemini, your AI CV Builder. Tell me about your professional background. You can type or send a voice note. To get started, what is your current job title and industry?' }
+    { role: 'assistant', content: 'Hi there! I am Sophi, your AI CV Builder. Tell me about your professional background. You can type or send a voice note. To get started, what is your current job title and industry?' }
   ])
   const [input, setInput] = useState('')
   const [isRecording, setIsRecording] = useState(false)
@@ -214,7 +214,7 @@ export default function ChatPage() {
             <div className="flex justify-start">
               <div className="bg-white border border-slate-200 rounded-2xl rounded-bl-none px-5 py-3.5 flex items-center gap-2">
                 <Loader2 className="h-4 w-4 animate-spin text-primary" />
-                <span className="text-sm text-slate-500">Gemini is thinking...</span>
+                <span className="text-sm text-slate-500">Sophi is thinking...</span>
               </div>
             </div>
           )}

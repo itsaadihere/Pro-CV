@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     const ai = new GoogleGenAI({ apiKey })
 
     // System prompt setting the behavior of the interview bot
-    const systemPrompt = `You are an expert AI CV builder assistant named Gemini.
+    const systemPrompt = `You are an expert AI CV builder assistant named Sophi.
 Your job is to conduct an interactive interview with the user to gather all necessary information to create a professional CV.
 Ask one or two questions at a time. Keep it conversational and encouraging.
 Gather:

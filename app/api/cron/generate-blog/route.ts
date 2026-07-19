@@ -29,6 +29,9 @@ export async function GET(request: Request) {
     // Generate a URL-friendly slug
     const slug = blogData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
 
+    const keyword = blogData.featured_image_keyword?.replace(/\s+/g, ',') || 'business,office';
+    const featured_image = `https://loremflickr.com/1200/600/${keyword}?random=${Date.now()}`;
+
     const { data, error } = await supabase.from('blog_posts').insert([
       {
         slug,
@@ -36,6 +39,7 @@ export async function GET(request: Request) {
         meta_description: blogData.description,
         content: blogData.content,
         primary_keyword: blogData.primary_keyword,
+        featured_image,
         word_count: blogData.content.split(/\s+/).length,
         published: true,
         published_at: new Date().toISOString()

@@ -7,22 +7,28 @@ export async function generateBlogPostWithGemini(): Promise<{ title: string; con
   }
 
   const prompt = `You are an expert SEO content writer and career coach specializing in the Pakistani and Gulf job markets.
-Please write an SEO-optimized blog post to be published on "Sophi - AI CV Builder". 
+Please write an extremely comprehensive, in-depth, and SEO-optimized blog post to be published on "Sophi - AI CV Builder". 
 Your goal is to target a long-tail keyword related to CV writing, ATS optimization, or career advancement in Pakistan/UAE.
-The blog should be converting and encourage users to buy the 1500 PKR CV revamp plan.
+The blog should be highly converting and strongly encourage users to buy the 1500 PKR CV revamp plan.
 
 Include the following sections:
 1. Catchy Title
 2. Meta Description (max 155 chars)
 3. Primary Keyword
-4. Content (1500+ words). Use H2 and H3 tags. Add a "Quick Answer" 40-word summary after each H2. Include a TL;DR at the top. Naturally weave in LSI keywords. End with a strong CTA to use Sophi.
+4. Content (Minimum 3000-4000 words). This must be a massively detailed guide. Use H2, H3, and H4 tags. Add a "Quick Answer" 40-word summary after each H2. Include a TL;DR at the top. Naturally weave in LSI keywords. End with a strong CTA to use Sophi.
+5. Featured Image Keyword (1-2 words, e.g., "office,resume" or "interview,success")
+6. Inline Image Keyword (1-2 words, e.g., "career,laptop" or "hiring,manager")
+
+Crucially, in the exact middle of your HTML content, you MUST embed an inline image using this exact format:
+<img src="https://loremflickr.com/800/400/[Inline Image Keyword]?random=1" alt="Relevant career illustration" class="w-full h-auto rounded-3xl my-10 shadow-sm object-cover" />
 
 Format the output strictly as a JSON object with the following keys:
 {
   "title": "...",
   "description": "...",
   "primary_keyword": "...",
-  "content": "..." // This should be HTML or Markdown content
+  "featured_image_keyword": "...",
+  "content": "..." // This must be proper HTML content, very long, and include the inline image
 }
 
 Do not include any markdown block wrappers like \`\`\`json around the output. Just return the raw JSON string.`;

@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import {
   FileText,
@@ -198,9 +199,12 @@ export default function LandingPage() {
                 <div className="absolute -top-4 -left-4 h-12 w-12 rounded-xl bg-blue-100/60 blur-lg" />
                 <div className="absolute -bottom-4 -right-4 h-16 w-16 rounded-xl bg-indigo-100/60 blur-lg" />
                 
-                <img
+                <Image
                   src="/images/cv_hero.png"
                   alt="Sophi AI CV builder dashboard showing ATS score and rewritten resume"
+                  width={1200}
+                  height={800}
+                  priority
                   className="rounded-xl w-full object-cover border border-slate-100 shadow-sm"
                 />
               </motion.div>

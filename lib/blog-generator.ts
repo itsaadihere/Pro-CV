@@ -1,4 +1,4 @@
-export async function generateBlogPostWithGemini(): Promise<{ title: string; content: string; description: string; primary_keyword: string } | null> {
+export async function generateBlogPostWithGemini(): Promise<{ title: string; content: string; description: string; primary_keyword: string; featured_image_keyword?: string } | null> {
   const apiKey = process.env.GEMINI_API_KEY;
 
   if (!apiKey || apiKey === 'your_gemini_key_here' || apiKey.includes('placeholder')) {

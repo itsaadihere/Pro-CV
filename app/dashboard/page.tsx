@@ -47,16 +47,17 @@ export default function DashboardPage() {
           .single()
 
         let finalProf = prof
-        if (profError) {
+          if (profError) {
           console.warn('Profile not found in profiles table. Attempting to create profile record.')
+          const isTestUser = session.user.email?.toLowerCase() === 'test@joinsophi.com'
           const { data: newProf } = await supabase
             .from('profiles')
             .upsert({
               id: session.user.id,
               email: session.user.email,
               full_name: session.user.user_metadata?.full_name || session.user.email?.split('@')[0],
-              has_paid: session.user.email === 'syedsaad.mob@gmail.com',
-              cv_credits: session.user.email === 'syedsaad.mob@gmail.com' ? 99 : 0,
+              has_paid: isTestUser,
+              cv_credits: isTestUser ? 100 : 0,
             })
             .select('*')
             .single()
@@ -64,12 +65,11 @@ export default function DashboardPage() {
           finalProf = newProf
         }
 
-        if (session.user.email === 'syedsaad.mob@gmail.com' && finalProf) {
-          finalProf = {
-            ...finalProf,
-            cv_credits: 99,
-            has_paid: true,
-          }
+        const isTestUser = session.user.email?.toLowerCase() === 'test@joinsophi.com'
+        if (isTestUser && finalProf && finalProf.cv_credits === 0) {
+          // If for some reason they have 0 credits, we shouldn't refill unless asked (per requirement).
+          // "only there is an account that is the test ID wont be needing to pay for CV as this acount already have 100 credit in balance and just in case this acount credit ends I will ask you to again refill but don't refill on your own only when I say to you"
+          // So we do NOT auto refill.
         }
         setProfile(finalProf)
 
@@ -137,11 +137,11 @@ export default function DashboardPage() {
               <span className="block text-3xl font-extrabold text-slate-950">{credits}</span>
             </div>
             <Link
-              href={isBetaActive() || credits > 0 ? '/upload' : '/payment'}
+              href={credits > 0 ? '/choice' : '/payment'}
               className="flex items-center gap-1 rounded-xl bg-primary px-4 py-2.5 text-xs font-bold text-white transition-all hover:bg-primary-800 hover:shadow-md hover:shadow-primary-100"
             >
               <PlusCircle className="h-4 w-4 text-gold" />
-              <span>{isBetaActive() || credits > 0 ? 'Revamp CV' : 'Buy Slots'}</span>
+              <span>{credits > 0 ? 'Create CV' : 'Buy Slots'}</span>
             </Link>
           </div>
         </div>
@@ -167,10 +167,10 @@ export default function DashboardPage() {
               </div>
               <div>
                 <Link
-                  href={isBetaActive() || credits > 0 ? '/upload' : '/payment'}
+                  href={credits > 0 ? '/choice' : '/payment'}
                   className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-xs font-bold text-white transition-all hover:bg-primary-800 shadow-sm hover:shadow-primary-100"
                 >
-                  <span>Revamp My First CV</span>
+                  <span>Create My First CV</span>
                   <PlusCircle className="h-4 w-4 text-gold" />
                 </Link>
               </div>

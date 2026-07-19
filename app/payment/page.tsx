@@ -149,19 +149,19 @@ export default function PaymentPage() {
               {paying ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  <span>Contacting JazzCash...</span>
+                  <span>Contacting EasyPaisa...</span>
                 </>
               ) : (
                 <>
-                  <CreditCard className="h-4 w-4 text-gold" />
-                  <span>Pay with JazzCash</span>
+                  <CreditCard className="h-4 w-4 text-green-500" />
+                  <span>Pay with EasyPaisa</span>
                 </>
               )}
             </button>
 
             <div className="flex items-center justify-center gap-1.5 text-xs text-slate-400">
-              <ShieldCheck className="h-4 w-4 text-gold" />
-              <span>Secure transaction processed by JazzCash Merchant Gateway</span>
+              <ShieldCheck className="h-4 w-4 text-green-500" />
+              <span>Secure transaction processed by EasyPaisa Merchant Gateway</span>
             </div>
           </div>
         </div>

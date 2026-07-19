@@ -64,6 +64,11 @@ export default function ResultPage() {
   const [formatting, setFormatting] = useState(false)
   const [downloadingPDF, setDownloadingPDF] = useState(false)
 
+  // LinkedIn Optimizer states
+  const [linkedinUrl, setLinkedinUrl] = useState('')
+  const [fetchingLinkedin, setFetchingLinkedin] = useState(false)
+  const [contrastReport, setContrastReport] = useState('')
+
   // Initialize template from job details on mount
   useEffect(() => {
     if (jobData?.template_used) {
@@ -252,6 +257,44 @@ export default function ResultPage() {
     }
   }
 
+  const handleFetchLinkedin = async () => {
+    if (!linkedinUrl.trim()) {
+      toast.error('Please enter a LinkedIn URL')
+      return
+    }
+    setFetchingLinkedin(true)
+    try {
+      const res = await fetch('/api/linkedin/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          url: linkedinUrl,
+          idealProfile: jobData.linkedin_optimizer || {}
+        })
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error)
+      setContrastReport(data.contrastReport)
+      toast.success('Contrast report generated!')
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to analyze LinkedIn profile')
+    } finally {
+      setFetchingLinkedin(false)
+    }
+  }
+
+  const exportContrastReport = () => {
+    if (!contrastReport) return
+    const element = document.createElement("a");
+    const file = new Blob([contrastReport], {type: 'text/plain'});
+    element.href = URL.createObjectURL(file);
+    element.download = "LinkedIn-Optimization-Report.txt";
+    document.body.appendChild(element); // Required for this to work in FireFox
+    element.click();
+    element.remove();
+    toast.success('Exported successfully!')
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-50">
@@ -385,6 +428,51 @@ export default function ResultPage() {
           {/* Panel 3: LinkedIn Optimizer */}
           {activeTab === 'linkedin' && (
             <div className="space-y-6 animate-fade-in">
+              <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
+                <h3 className="text-base font-bold text-slate-800 mb-2">Live Profile Analysis</h3>
+                <p className="text-xs text-slate-500 mb-4">Enter your LinkedIn profile URL to fetch your live data and get a contrast report comparing it with your ideal profile.</p>
+                <div className="flex gap-3">
+                  <input
+                    type="url"
+                    placeholder="https://linkedin.com/in/username"
+                    value={linkedinUrl}
+                    onChange={(e) => setLinkedinUrl(e.target.value)}
+                    className="flex-1 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                  <button
+                    onClick={handleFetchLinkedin}
+                    disabled={fetchingLinkedin || !linkedinUrl.trim()}
+                    className="flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-bold text-white transition-all hover:bg-blue-700 disabled:opacity-60"
+                  >
+                    {fetchingLinkedin ? <Loader2 className="h-4 w-4 animate-spin" /> : <Compass className="h-4 w-4" />}
+                    <span>Fetch & Analyze</span>
+                  </button>
+                </div>
+              </div>
+              
+              {contrastReport && (
+                <div className="rounded-2xl border border-slate-150 bg-white shadow-sm overflow-hidden animate-fade-in border-blue-200">
+                  <div className="flex items-center justify-between border-b border-slate-150 bg-blue-50/50 px-6 py-4">
+                    <div>
+                      <h3 className="text-base font-bold text-slate-800">Contrast Report & Suggestions</h3>
+                      <p className="text-[11px] text-slate-500 mt-0.5">Your live profile vs. the ideal target</p>
+                    </div>
+                    <button
+                      onClick={exportContrastReport}
+                      className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-3.5 py-1.5 text-xs font-bold text-white shadow-sm hover:bg-blue-700"
+                    >
+                      <Download className="h-3.5 w-3.5" />
+                      <span>Export Document</span>
+                    </button>
+                  </div>
+                  <div className="p-6 md:p-8">
+                    <pre className="text-sm leading-relaxed text-slate-800 whitespace-pre-wrap font-sans text-justify">
+                      {contrastReport}
+                    </pre>
+                  </div>
+                </div>
+              )}
+
               <div className="grid gap-6 md:grid-cols-3">
                 {/* Profile Headline */}
                 <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm md:col-span-2 space-y-4">

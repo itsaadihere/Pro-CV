@@ -1,15 +1,15 @@
 export const isBetaMode = (): boolean => {
-  return process.env.NEXT_PUBLIC_BETA_MODE === 'true'
+  return false // Beta has ended
 }
 
 export const getBetaEndDate = (): Date => {
-  return new Date(process.env.NEXT_PUBLIC_BETA_END_DATE || '2099-01-01')
+  return new Date('2024-01-01')
 }
 
 export const isBetaExpired = (): boolean => {
-  return new Date() > getBetaEndDate()
+  return true
 }
 
 export const isBetaActive = (): boolean => {
-  return isBetaMode() && !isBetaExpired()
+  return false
 }

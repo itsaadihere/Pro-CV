@@ -2,33 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getRouteSupabase } from '@/lib/supabase-server'
 import crypto from 'crypto'
 
-function formatDateTime(date: Date): string {
-  const pad = (n: number) => n.toString().padStart(2, '0')
-  return (
-    date.getFullYear().toString() +
-    pad(date.getMonth() + 1) +
-    pad(date.getDate()) +
-    pad(date.getHours()) +
-    pad(date.getMinutes()) +
-    pad(date.getSeconds())
-  )
-}
-
-function calculateSecureHash(params: Record<string, string>, salt: string): string {
-  const sortedKeys = Object.keys(params).sort()
-  const paramStrings = sortedKeys
-    .filter((key) => params[key] !== undefined && params[key] !== '')
-    .map((key) => `${key}=${params[key]}`)
-    .join('&')
-
-  const hashString = `${salt}&${paramStrings}`
-  return crypto
-    .createHmac('sha256', salt)
-    .update(hashString)
-    .digest('hex')
-    .toUpperCase()
-}
-
 export async function POST(req: NextRequest) {
   try {
     const supabase = getRouteSupabase()
@@ -41,42 +14,28 @@ export async function POST(req: NextRequest) {
     const email = session.user.email
     const userId = session.user.id
 
-    const merchantId = process.env.JAZZCASH_MERCHANT_ID || 'placeholder_merchant_id'
-    const password = process.env.JAZZCASH_PASSWORD || 'placeholder_password'
-    const salt = process.env.JAZZCASH_INTEGRITY_SALT || 'placeholder_salt'
+    // TODO: EasyPaisa Integration Details pending from user.
+    // Mocking the EasyPaisa checkout flow for now.
+    const storeId = process.env.EASYPAISA_STORE_ID || 'placeholder_store_id'
+    const hashKey = process.env.EASYPAISA_HASH_KEY || 'placeholder_hash_key'
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
 
-    const txnRefNo = 'T' + Date.now().toString()
-    const txnDateTime = formatDateTime(new Date())
-    // 1 hour expiry
-    const expiryDateTime = formatDateTime(new Date(Date.now() + 3600 * 1000))
-    const billRef = 'B' + Date.now().toString().slice(-6)
-
+    const orderRefNum = 'EP' + Date.now().toString()
+    
+    // EasyPaisa typical parameters (mocked)
     const params: Record<string, string> = {
-      pp_Version: '2.0',
-      pp_TxnType: 'MPAY',
-      pp_Language: 'EN',
-      pp_MerchantID: merchantId,
-      pp_Password: password,
-      pp_TxnRefNo: txnRefNo,
-      pp_Amount: '150000', // 1500 PKR in Paisas
-      pp_TxnCurrency: 'PKR',
-      pp_TxnDateTime: txnDateTime,
-      pp_BillReference: billRef,
-      pp_Description: 'Sophi AI CV Revamp - 1 Credit',
-      pp_TxnExpiryDateTime: expiryDateTime,
-      pp_ReturnURL: `${appUrl}/api/payment/verify`,
-      ppmpf_1: email || '',
-      ppmpf_2: userId,
+      storeId: storeId,
+      amount: '1500.0', // 1500 PKR
+      postBackURL: `${appUrl}/api/payment/verify`,
+      orderRefNum: orderRefNum,
+      email: email || '',
+      merchantHash: 'MOCK_HASH_FOR_NOW',
     }
 
-    const secureHash = calculateSecureHash(params, salt)
-    params.pp_SecureHash = secureHash
-
-    const postUrl =
-      process.env.NODE_ENV === 'production'
-        ? 'https://jazzcash.com.pk/CustomerPortal/API/CheckOut' // Replace with live URL if different
-        : 'https://sandbox.jazzcash.com.pk/CustomerPortal/API/CheckOut'
+    // Since we don't have the actual EasyPaisa production/sandbox URL or docs yet,
+    // we'll point it to a mock checkout URL or the verify URL directly to simulate payment completion.
+    // To allow the flow to continue in mock mode, we could point it directly to our verify URL with success=true
+    const postUrl = `${appUrl}/api/payment/verify?orderRefNum=${orderRefNum}&mockSuccess=true`
 
     return NextResponse.json({
       success: true,

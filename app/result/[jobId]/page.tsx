@@ -164,11 +164,10 @@ export default function ResultPage() {
         }),
       })
 
+      const data = await res.json().catch(() => null)
       if (!res.ok) {
-        throw new Error('Failed to rotate template')
+        throw new Error(data?.error || 'Failed to rotate template')
       }
-
-      const data = await res.json()
       
       setJobData((prev: any) => ({
         ...prev,

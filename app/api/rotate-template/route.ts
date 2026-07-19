@@ -50,28 +50,13 @@ export async function POST(req: NextRequest) {
     const protocol = host.includes('localhost') ? 'http' : 'https'
     const appUrl = `${protocol}://${host}`
 
-    const exportRes = await fetch(`${appUrl}/api/export-pdf`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        jobId,
-        templateId: nextTemplateId,
-      }),
-    })
-
-    if (!exportRes.ok) {
-      const errorText = await exportRes.text()
-      throw new Error(`PDF export failed during template rotation: ${errorText}`)
-    }
-
-    const exportData = await exportRes.json()
+    const { generateAndUploadPdf } = await import('@/lib/pdfService')
+    const { publicUrl } = await generateAndUploadPdf(jobId, nextTemplateId, null, appUrl)
 
     return NextResponse.json({
       success: true,
       templateId: nextTemplateId,
-      pdfUrl: exportData.pdfUrl,
+      pdfUrl: publicUrl,
     })
   } catch (error: any) {
     console.error('Error in /api/rotate-template:', error)

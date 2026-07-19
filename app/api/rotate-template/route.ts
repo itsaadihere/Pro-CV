@@ -41,22 +41,20 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Job not found or query failed' }, { status: 404 })
     }
 
-    // 2. Select next template using the rotation engine
     const rotation = new TemplateRotationEngine()
     const nextTemplateId = await rotation.getNextTemplate(job.user_id, preferredStyle)
 
-    // 3. Trigger Puppeteer PDF generation for the next template
-    const host = req.headers.get('host') || 'localhost:3000'
-    const protocol = host.includes('localhost') ? 'http' : 'https'
-    const appUrl = `${protocol}://${host}`
-
-    const { generateAndUploadPdf } = await import('@/lib/pdfService')
-    const { publicUrl } = await generateAndUploadPdf(jobId, nextTemplateId, null, appUrl)
+    // Update job details in Supabase
+    await supabase
+      .from('cv_jobs')
+      .update({
+        template_used: nextTemplateId
+      })
+      .eq('id', jobId)
 
     return NextResponse.json({
       success: true,
       templateId: nextTemplateId,
-      pdfUrl: publicUrl,
     })
   } catch (error: any) {
     console.error('Error in /api/rotate-template:', error)

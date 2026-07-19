@@ -63,6 +63,7 @@ export default function ResultPage() {
   const [displayCVText, setDisplayCVText] = useState('')
   const [formatting, setFormatting] = useState(false)
   const [downloadingPDF, setDownloadingPDF] = useState(false)
+  const [rotatingTemplate, setRotatingTemplate] = useState(false)
 
   // LinkedIn Optimizer states
   const [linkedinUrl, setLinkedinUrl] = useState('')
@@ -137,21 +138,40 @@ export default function ResultPage() {
   }, [jobData?.generated_cv])
 
   const handleDownloadPDF = async () => {
-    if (!jobData?.pdf_output_path) {
-      toast.error('PDF file path not found. Try regenerating.')
-      return
+    setDownloadingPDF(true)
+    try {
+      const res = await fetch('/api/export-pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ jobId, templateId: selectedTemplate, color: selectedColor })
+      })
+      const data = await res.json().catch(() => null)
+      if (!res.ok) {
+        throw new Error(data?.error || 'Failed to generate PDF download')
+      }
+      
+      setJobData((prev: any) => ({
+        ...prev,
+        pdf_output_path: data.pdfUrl
+      }))
+      
+      const a = document.createElement('a')
+      a.href = data.pdfUrl
+      a.download = `ProCV-${selectedTemplate}-${jobId.substring(0, 8)}.pdf`
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+      toast.success('Successfully downloaded PDF!')
+    } catch (err: any) {
+      console.error(err)
+      toast.error(err.message || 'Error generating PDF.')
+    } finally {
+      setDownloadingPDF(false)
     }
-    const a = document.createElement('a')
-    a.href = jobData.pdf_output_path
-    a.download = `ProCV-${selectedTemplate}-${jobId.substring(0, 8)}.pdf`
-    document.body.appendChild(a)
-    a.click()
-    a.remove()
-    toast.success('Successfully downloaded PDF!')
   }
 
   const handleRegenerateWithDifferentTemplate = async () => {
-    setDownloadingPDF(true)
+    setRotatingTemplate(true)
     try {
       const res = await fetch('/api/rotate-template', {
         method: 'POST',
@@ -172,16 +192,15 @@ export default function ResultPage() {
       setJobData((prev: any) => ({
         ...prev,
         template_used: data.templateId,
-        pdf_output_path: data.pdfUrl
       }))
       
       setSelectedTemplate(data.templateId)
-      toast.success('Successfully updated template and PDF!')
+      toast.success('Successfully switched template layout!')
     } catch (err: any) {
       console.error(err)
       toast.error(err.message || 'Error rotating template.')
     } finally {
-      setDownloadingPDF(false)
+      setRotatingTemplate(false)
     }
   }
 
@@ -742,11 +761,11 @@ export default function ResultPage() {
             </button>
             <button
               onClick={handleRegenerateWithDifferentTemplate}
-              disabled={downloadingPDF}
+              disabled={rotatingTemplate || downloadingPDF}
               className="flex items-center justify-center gap-1.5 rounded-lg border border-slate-350 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-sm hover:bg-slate-50 hover:border-slate-450 transition-all disabled:opacity-60"
               title="Rotate to another design layout"
             >
-              {downloadingPDF && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+              {rotatingTemplate && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
               <span>Try Different Template</span>
             </button>
             <button

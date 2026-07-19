@@ -57,13 +57,8 @@ export async function POST(req: NextRequest) {
         const protocol = host.includes('localhost') ? 'http' : 'https'
         const appUrl = `${protocol}://${host}`
         
-        const exportRes = await fetch(`${appUrl}/api/export-pdf`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ jobId, templateId })
-        })
-        
-        if (!exportRes.ok) throw new Error('Fallback PDF generation failed')
+        const { generateAndUploadPdf } = await import('@/lib/pdfService')
+        await generateAndUploadPdf(jobId, templateId, null, appUrl)
         
         const { data: retryData } = await supabase.storage
           .from('cv-outputs')

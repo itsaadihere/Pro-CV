@@ -2,37 +2,53 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServiceSupabase } from '@/lib/supabase-server'
 import { Safepay } from '@sfpy/node-sdk'
 
-export async function POST(req: NextRequest) {
+async function handleVerification(req: NextRequest) {
   try {
     const contentType = req.headers.get('content-type') || ''
     let bodyParams: Record<string, string> = {}
 
-    if (contentType.includes('application/x-www-form-urlencoded')) {
-      const formData: any = await req.formData()
-      formData.forEach((value: any, key: string) => {
-        bodyParams[key] = value.toString()
-      })
-    } else {
-      bodyParams = await req.json()
+    // Only try to parse body if it's a POST request and has content
+    if (req.method === 'POST') {
+      if (contentType.includes('application/x-www-form-urlencoded')) {
+        const formData: any = await req.formData()
+        formData.forEach((value: any, key: string) => {
+          bodyParams[key] = value.toString()
+        })
+      } else if (contentType.includes('application/json')) {
+        try {
+          bodyParams = await req.json()
+        } catch (e) {
+          console.error('Failed to parse JSON body', e)
+        }
+      }
     }
 
-    // Safepay passes these in the POST body
-    const tracker = bodyParams.tracker
-    const reference = bodyParams.reference
-    const sig = bodyParams.sig
+    const searchParams = req.nextUrl.searchParams
+    
+    // Safepay passes these in the POST body or GET query params
+    const tracker = bodyParams.tracker || searchParams.get('tracker')
+    const reference = bodyParams.reference || searchParams.get('reference')
+    const sig = bodyParams.sig || searchParams.get('sig')
 
     // We passed these in the redirectUrl query string during initiate
-    const searchParams = req.nextUrl.searchParams
-    const email = searchParams.get('email')
-    const orderRefNum = searchParams.get('orderRefNum') || 'SP_REF_UNKNOWN'
+    const email = searchParams.get('email') || bodyParams.email
+    const orderRefNum = searchParams.get('orderRefNum') || bodyParams.orderRefNum || 'SP_REF_UNKNOWN'
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
 
-    console.log('Safepay Verification Callback Payload:', { bodyParams, email, orderRefNum })
+    console.log('Safepay Verification Callback Payload:', { tracker, reference, email, orderRefNum, method: req.method })
 
     if (!email) {
-      console.error('Payment succeeded but email is missing from query params.')
+      console.error('Payment succeeded but email is missing.')
       return NextResponse.redirect(
         new URL(`/payment/callback?status=failed&message=User+session+lost`, appUrl),
+        { status: 303 }
+      )
+    }
+
+    if (!tracker || !sig) {
+      console.error('Missing tracker or signature from Safepay callback.')
+      return NextResponse.redirect(
+        new URL(`/payment/callback?status=failed&message=Invalid+Payment+Callback`, appUrl),
         { status: 303 }
       )
     }
@@ -46,7 +62,7 @@ export async function POST(req: NextRequest) {
       webhookSecret: process.env.SAFEPAY_WEBHOOK_SECRET || 'dummy-secret-for-sdk-to-work',
     })
 
-    const isValid = safepay.verify.signature({ body: bodyParams })
+    const isValid = safepay.verify.signature({ body: { tracker, sig } })
 
     if (!isValid) {
       console.error('Safepay signature verification failed!')
@@ -105,5 +121,13 @@ export async function POST(req: NextRequest) {
       { status: 303 }
     )
   }
+}
+
+export async function POST(req: NextRequest) {
+  return handleVerification(req)
+}
+
+export async function GET(req: NextRequest) {
+  return handleVerification(req)
 }
 

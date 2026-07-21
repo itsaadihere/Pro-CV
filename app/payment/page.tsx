@@ -7,6 +7,7 @@ import { CreditCard, ShieldCheck, Loader2, ArrowLeft, HelpCircle } from 'lucide-
 import Link from 'next/link'
 import toast from 'react-hot-toast'
 import { isBetaActive } from '@/lib/beta'
+import PayfastCheckout from '@/components/PayfastCheckout'
 
 export default function PaymentPage() {
   const router = useRouter()
@@ -128,28 +129,33 @@ export default function PaymentPage() {
 
           {/* Checkout Buttons */}
           <div className="mt-8 space-y-4">
-            <button
-              onClick={handlePayment}
-              disabled={paying}
-              className="flex w-full justify-center items-center gap-2 rounded-xl bg-primary py-3.5 text-sm font-bold text-white transition-all hover:bg-primary-850 disabled:bg-primary-350 hover:shadow-lg hover:shadow-primary-100"
-            >
-              {paying ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  <span>Connecting to Safepay...</span>
-                </>
-              ) : (
-                <>
-                  <CreditCard className="h-4 w-4 text-green-500" />
-                  <span>Pay with Safepay</span>
-                </>
-              )}
-            </button>
-
-            <div className="flex items-center justify-center gap-1.5 text-xs text-slate-400">
-              <ShieldCheck className="h-4 w-4 text-green-500" />
-              <span>Secure transaction processed by Safepay</span>
-            </div>
+            {process.env.NEXT_PUBLIC_ACTIVE_PAYMENT_GATEWAY === 'payfast' ? (
+              <PayfastCheckout email={email} />
+            ) : (
+              <>
+                <button
+                  onClick={handlePayment}
+                  disabled={paying}
+                  className="flex w-full justify-center items-center gap-2 rounded-xl bg-primary py-3.5 text-sm font-bold text-white transition-all hover:bg-primary-850 disabled:bg-primary-350 hover:shadow-lg hover:shadow-primary-100"
+                >
+                  {paying ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <span>Connecting to Safepay...</span>
+                    </>
+                  ) : (
+                    <>
+                      <CreditCard className="h-4 w-4 text-green-500" />
+                      <span>Pay with Safepay</span>
+                    </>
+                  )}
+                </button>
+                <div className="flex items-center justify-center gap-1.5 text-xs text-slate-400">
+                  <ShieldCheck className="h-4 w-4 text-green-500" />
+                  <span>Secure transaction processed by Safepay</span>
+                </div>
+              </>
+            )}
           </div>
         </div>
 

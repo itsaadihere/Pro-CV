@@ -50,21 +50,8 @@ export default function PaymentPage() {
         throw new Error(data.error || 'Failed to initiate transaction.')
       }
 
-      // Create a form programmatically and submit it to the gateway
-      const form = document.createElement('form')
-      form.method = 'POST'
-      form.action = data.postUrl
-
-      Object.entries(data.params).forEach(([key, value]) => {
-        const input = document.createElement('input')
-        input.type = 'hidden'
-        input.name = key
-        input.value = value as string
-        form.appendChild(input)
-      })
-
-      document.body.appendChild(form)
-      form.submit()
+      // Redirect to the Safepay Checkout URL
+      window.location.href = data.postUrl
     } catch (error: any) {
       toast.error(error.message || 'Payment initiation failed. Please try again.')
       setPaying(false)
@@ -149,19 +136,19 @@ export default function PaymentPage() {
               {paying ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  <span>Contacting EasyPaisa...</span>
+                  <span>Connecting to Safepay...</span>
                 </>
               ) : (
                 <>
                   <CreditCard className="h-4 w-4 text-green-500" />
-                  <span>Pay with EasyPaisa</span>
+                  <span>Pay with Safepay</span>
                 </>
               )}
             </button>
 
             <div className="flex items-center justify-center gap-1.5 text-xs text-slate-400">
               <ShieldCheck className="h-4 w-4 text-green-500" />
-              <span>Secure transaction processed by EasyPaisa Merchant Gateway</span>
+              <span>Secure transaction processed by Safepay</span>
             </div>
           </div>
         </div>

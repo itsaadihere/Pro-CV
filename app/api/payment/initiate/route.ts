@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getRouteSupabase } from '@/lib/supabase-server'
-import crypto from 'crypto'
+import { Safepay } from '@sfpy/node-sdk'
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,35 +12,38 @@ export async function POST(req: NextRequest) {
     }
 
     const email = session.user.email
-    const userId = session.user.id
 
-    // TODO: EasyPaisa Integration Details pending from user.
-    // Mocking the EasyPaisa checkout flow for now.
-    const storeId = process.env.EASYPAISA_STORE_ID || 'placeholder_store_id'
-    const hashKey = process.env.EASYPAISA_HASH_KEY || 'placeholder_hash_key'
+    const environment = process.env.SAFEPAY_ENVIRONMENT === 'production' ? 'production' : 'sandbox'
+    const safepay = new Safepay({
+      environment,
+      apiKey: process.env.SAFEPAY_PUBLIC_KEY || '',
+      v1Secret: process.env.SAFEPAY_SECRET_KEY || '',
+      webhookSecret: '',
+    })
+
+    // Safepay expects amount in smallest unit (Paisa). 1500 PKR = 150000 Paisa.
+    const amountInPaisa = 150000 
+    const { token } = await safepay.payments.create({
+      amount: amountInPaisa,
+      currency: 'PKR',
+    })
+
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+    const orderRefNum = 'SP' + Date.now().toString()
 
-    const orderRefNum = 'EP' + Date.now().toString()
-    
-    // EasyPaisa typical parameters (mocked)
-    const params: Record<string, string> = {
-      storeId: storeId,
-      amount: '1500.0', // 1500 PKR
-      postBackURL: `${appUrl}/api/payment/verify`,
-      orderRefNum: orderRefNum,
-      email: email || '',
-      merchantHash: 'MOCK_HASH_FOR_NOW',
-    }
-
-    // Since we don't have the actual EasyPaisa production/sandbox URL or docs yet,
-    // we'll point it to a mock checkout URL or the verify URL directly to simulate payment completion.
-    // To allow the flow to continue in mock mode, we could point it directly to our verify URL with success=true
-    const postUrl = `${appUrl}/api/payment/verify?orderRefNum=${orderRefNum}&mockSuccess=true`
+    const checkoutUrl = safepay.checkout.create({
+      token,
+      orderId: orderRefNum,
+      cancelUrl: `${appUrl}/payment/callback?status=failed`,
+      // We pass the email and orderRefNum so we can credit the right user upon return
+      redirectUrl: `${appUrl}/api/payment/verify?orderRefNum=${orderRefNum}&email=${encodeURIComponent(email || '')}`,
+      source: 'custom',
+      webhooks: false
+    })
 
     return NextResponse.json({
       success: true,
-      params,
-      postUrl,
+      postUrl: checkoutUrl,
     })
   } catch (error: any) {
     console.error('Error in /api/payment/initiate:', error)

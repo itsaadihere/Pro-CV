@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
 
     const environment = process.env.SAFEPAY_ENVIRONMENT === 'production' ? 'production' : 'sandbox'
     const safepay = new Safepay({
-      environment,
+      environment: environment as any,
       apiKey: process.env.SAFEPAY_PUBLIC_KEY || '',
       v1Secret: process.env.SAFEPAY_SECRET_KEY || '',
       webhookSecret: '',

@@ -40,13 +40,13 @@ export async function POST(req: NextRequest) {
     // Verify the Safepay Signature
     const environment = process.env.SAFEPAY_ENVIRONMENT === 'production' ? 'production' : 'sandbox'
     const safepay = new Safepay({
-      environment,
+      environment: environment as any,
       apiKey: process.env.SAFEPAY_PUBLIC_KEY || '',
       v1Secret: process.env.SAFEPAY_SECRET_KEY || '',
       webhookSecret: '',
     })
 
-    const isValid = safepay.verify.signature(tracker, sig)
+    const isValid = safepay.verify.signature({ body: bodyParams })
 
     if (!isValid) {
       console.error('Safepay signature verification failed!')

@@ -38,7 +38,7 @@ export default function IslamabadCVBuilderPage() {
                 <CheckCircle className="w-5 h-5 text-emerald-500" /> Optimize for telecom, NGO, and corporate sectors
               </li>
               <li className="flex items-center gap-3 font-medium text-slate-700">
-                <CheckCircle className="w-5 h-5 text-emerald-500" /> Pay easily via JazzCash or Easypaisa
+                <CheckCircle className="w-5 h-5 text-emerald-500" /> Pay easily via Safepay
               </li>
             </ul>
 

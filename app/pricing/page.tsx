@@ -56,7 +56,7 @@ export default function PricingPage() {
 
               <div className="space-y-4">
                 <Link href="/login" className="block w-full py-4 px-6 text-center text-white bg-primary font-bold rounded-xl hover:bg-primary-800 transition-colors">
-                  Pay via JazzCash / Easypaisa
+                  Pay securely via Safepay
                 </Link>
                 <div className="flex items-center justify-center gap-2 text-sm text-slate-500">
                   <Shield className="w-4 h-4" /> Secure checkout process

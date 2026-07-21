@@ -32,9 +32,9 @@ export default function HowItWorksPage() {
               <Zap className="w-12 h-12" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-slate-900 mb-2">Step 1 — Pay 1500 PKR via JazzCash or Easypaisa</h2>
+              <h2 className="text-2xl font-bold text-slate-900 mb-2">Step 1 — Pay 1500 PKR via Safepay</h2>
               <p className="text-slate-600 mb-4">
-                Complete a one-time payment of 1500 PKR using JazzCash or Easypaisa. Your account is instantly unlocked after payment confirmation.
+                Complete a one-time payment of 1500 PKR securely using Safepay. Your account is instantly unlocked after payment confirmation.
               </p>
               <div className="flex items-center gap-2 text-sm font-medium text-emerald-600">
                 <CheckCircle className="w-5 h-5" /> Instant Activation

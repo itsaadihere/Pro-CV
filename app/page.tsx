@@ -232,7 +232,7 @@ export default function LandingPage() {
               </div>
               <h3 className="text-base font-bold text-slate-850">Pay 1500 PKR</h3>
               <p className="text-xs leading-relaxed text-slate-550">
-                Unlock full access securely via JazzCash or Easypaisa card checkouts. Simple slot credits activation.
+                Unlock full access securely via Safepay. Simple slot credits activation.
               </p>
             </div>
 
@@ -431,7 +431,7 @@ export default function LandingPage() {
               <h3 className="text-xl font-bold text-slate-900 mb-2">How do I pay for Sophi?</h3>
               <QuickAnswer 
                 question="How do I pay for Sophi?"
-                answer="Sophi accepts payment via JazzCash and Easypaisa — Pakistan's most popular mobile payment platforms. No credit card required." 
+                answer="Sophi accepts payment securely via Safepay — Pakistan's trusted payment gateway. Bank transfer, cards, and mobile wallets supported." 
               />
               <p className="text-sm text-slate-600">
                 You can directly pay via our integrated checkout securely. Your account is activated instantly after the payment completes, providing you immediate access to your revamped career documents.

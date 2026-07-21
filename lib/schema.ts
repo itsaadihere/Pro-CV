@@ -109,7 +109,7 @@ export const faqSchema = {
       "name": "How do I pay for Sophi?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Sophi accepts payment via JazzCash and Easypaisa — Pakistan's most popular mobile payment platforms. No credit card required."
+        "text": "Sophi accepts payment securely via Safepay — Pakistan's trusted payment gateway. Bank transfer, cards, and mobile wallets supported."
       }
     },
     {
@@ -153,8 +153,8 @@ export const howToSchema = {
   "step": [
     {
       "@type": "HowToStep",
-      "name": "Pay 1500 PKR via JazzCash or Easypaisa",
-      "text": "Complete a one-time payment of 1500 PKR using JazzCash or Easypaisa. Your account is instantly unlocked after payment confirmation.",
+      "name": "Pay 1500 PKR via Safepay",
+      "text": "Complete a one-time payment of 1500 PKR securely using Safepay. Your account is instantly unlocked after payment confirmation.",
       "position": 1
     },
     {

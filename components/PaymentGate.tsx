@@ -50,7 +50,7 @@ export default function PaymentGate({ credits, loading, children }: PaymentGateP
             <div className="rounded-xl border border-slate-100 bg-white p-4">
               <span className="block text-xs font-bold text-slate-400 uppercase">Cost</span>
               <span className="mt-1 block text-lg font-bold text-slate-800">1,500 PKR</span>
-              <span className="block text-xs text-slate-500 mt-0.5">Secure JazzCash / Easypaisa payment</span>
+              <span className="block text-xs text-slate-500 mt-0.5">Secure Safepay checkout</span>
             </div>
           </div>
 

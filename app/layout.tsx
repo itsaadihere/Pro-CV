@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import BetaBanner from "@/components/BetaBanner";
+import Footer from "@/components/Footer";
 import { GoogleAnalytics } from '@next/third-parties/google';
 import Script from 'next/script';
 import { organizationSchema } from '@/lib/schema';
@@ -91,6 +92,7 @@ export default function RootLayout({
         <BetaBanner />
         <Toaster position="top-center" reverseOrder={false} />
         {children}
+        <Footer />
         <GoogleAnalytics gaId="G-8YEPSJ9MP3" />
       </body>
     </html>

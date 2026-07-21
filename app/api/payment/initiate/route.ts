@@ -21,8 +21,8 @@ export async function POST(req: NextRequest) {
       webhookSecret: process.env.SAFEPAY_WEBHOOK_SECRET || 'dummy-secret-for-sdk-to-work',
     })
 
-    // Safepay expects amount in smallest unit (Paisa). 1500 PKR = 150000 Paisa.
-    const amountInPaisa = 150000 
+    // Safepay expects the exact amount in PKR when creating a payment via the SDK.
+    const amountInPaisa = 1500 
     const { token } = await safepay.payments.create({
       amount: amountInPaisa,
       currency: 'PKR',

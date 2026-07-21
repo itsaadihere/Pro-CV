@@ -7,8 +7,8 @@ export async function POST(req: NextRequest) {
     let bodyParams: Record<string, string> = {}
 
     if (contentType.includes('application/x-www-form-urlencoded')) {
-      const formData = await req.formData()
-      formData.forEach((value, key) => {
+      const formData: any = await req.formData()
+      formData.forEach((value: any, key: string) => {
         bodyParams[key] = value.toString()
       })
     } else {

@@ -1,6 +1,6 @@
 import { getServiceSupabase } from '@/lib/supabase-server'
 
-async function getBrowserInstance() {
+export async function getBrowserInstance() {
   const isProd = process.env.NODE_ENV === 'production'
   
   if (isProd) {
@@ -31,7 +31,7 @@ export async function generateAndUploadPdf(jobId: string, templateId: string, co
   const browser = await getBrowserInstance()
   const page = await browser.newPage()
 
-  const renderUrl = `${appUrl}/cv-render/${jobId}?template=${templateId}${color ? \`&color=\${color}\` : ''}`
+  const renderUrl = `${appUrl}/cv-render/${jobId}?template=${templateId}${color ? `&color=${color}` : ''}`
   console.log('Puppeteer navigating to render URL:', renderUrl)
   
   await page.goto(renderUrl, { waitUntil: 'networkidle0' })

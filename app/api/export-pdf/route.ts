@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServiceSupabase } from '@/lib/supabase-server'
-import { generateAndUploadPdf } from '@/lib/pdfService'
+import { generateAndUploadPdf, getBrowserInstance } from '@/lib/pdfService'
 
 export const dynamic = 'force-dynamic'
 

@@ -4,9 +4,9 @@ import { GoogleGenAI } from '@google/genai'
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData()
-    const historyJson = formData.get('history') as string
-    const text = formData.get('text') as string | null
-    const audioBlob = formData.get('audio') as Blob | null
+    const historyJson = (formData as any).get('history') as string
+    const text = (formData as any).get('text') as string | null
+    const audioBlob = (formData as any).get('audio') as Blob | null
 
     const history = historyJson ? JSON.parse(historyJson) : []
     

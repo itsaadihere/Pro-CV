@@ -452,15 +452,7 @@ export default function LandingPage() {
             © {new Date().getFullYear()} JoinSophi.com AI CV Platform. Powered by Moonshot API. All rights reserved.
           </p>
 
-          <a
-            href="https://wa.me/923000000000?text=I%20have%2520a%2520question%2520about%2520Sophi"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 rounded-lg border border-slate-200 px-3.5 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-800"
-          >
-            <MessageSquare className="h-4 w-4 text-gold" />
-            <span>WhatsApp Support</span>
-          </a>
+
         </div>
       </footer>
     </div>

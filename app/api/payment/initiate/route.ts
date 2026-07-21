@@ -5,13 +5,13 @@ import { Safepay } from '@sfpy/node-sdk'
 export async function POST(req: NextRequest) {
   try {
     const supabase = getRouteSupabase()
-    const { data: { session } } = await supabase.auth.getSession()
+    const { data: { user } } = await supabase.auth.getUser()
 
-    if (!session) {
+    if (!user) {
       return NextResponse.json({ error: 'Unauthorized. Please log in first.' }, { status: 401 })
     }
 
-    const email = session.user.email
+    const email = user.email
 
     const environment = process.env.SAFEPAY_ENVIRONMENT === 'production' ? 'production' : 'sandbox'
     const safepay = new Safepay({

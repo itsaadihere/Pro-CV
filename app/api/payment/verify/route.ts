@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
       environment: environment as any,
       apiKey: process.env.SAFEPAY_PUBLIC_KEY || '',
       v1Secret: process.env.SAFEPAY_SECRET_KEY || '',
-      webhookSecret: '',
+      webhookSecret: process.env.SAFEPAY_WEBHOOK_SECRET || 'dummy-secret-for-sdk-to-work',
     })
 
     const isValid = safepay.verify.signature({ body: bodyParams })

@@ -34,8 +34,8 @@ Format the output strictly as a JSON object with the following keys:
 Do not include any markdown block wrappers like \`\`\`json around the output. Just return the raw JSON string.`;
 
   try {
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+    let response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -47,15 +47,31 @@ Do not include any markdown block wrappers like \`\`\`json around the output. Ju
     );
 
     if (!response.ok) {
-      console.error(`❌ Gemini API error: ${response.status}`);
+      console.warn(`⚠️ gemini-1.5-flash returned ${response.status}, retrying with gemini-2.0-flash...`);
+      response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: { temperature: 0.7 },
+          }),
+        }
+      );
+    }
+
+    if (!response.ok) {
+      const errText = await response.text();
+      console.error(`❌ Gemini API error: ${response.status} - ${errText}`);
       return null;
     }
 
     const data = await response.json();
     let textOutput = data.candidates?.[0]?.content?.parts?.[0]?.text;
     if (textOutput) {
-      // Remove any json markdown wrapping if it exists
-      textOutput = textOutput.replace(/```json/g, '').replace(/```/g, '').trim();
+      // Clean up markdown block wrappers and leading/trailing whitespace
+      textOutput = textOutput.replace(/```json/gi, '').replace(/```/g, '').trim();
       return JSON.parse(textOutput);
     }
     return null;

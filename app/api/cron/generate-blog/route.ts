@@ -4,9 +4,15 @@ import { createClient } from '@supabase/supabase-js';
 import { notifyIndexNow } from '@/lib/indexNow';
 
 export async function GET(request: Request) {
-  // Verify cron secret to prevent unauthorized access
+  const { searchParams } = new URL(request.url);
+  const secretParam = searchParams.get('secret');
   const authHeader = request.headers.get('authorization');
-  if (process.env.CRON_SECRET && authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  
+  const expectedSecret = process.env.CRON_SECRET || 'Blog@sophi_321';
+  const isHeaderValid = authHeader === `Bearer ${expectedSecret}`;
+  const isParamValid = secretParam === expectedSecret;
+
+  if (!isHeaderValid && !isParamValid) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

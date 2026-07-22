@@ -18,6 +18,7 @@ import {
   ChevronRight,
 } from 'lucide-react'
 import Header from '@/components/Header'
+import FAQAccordion from '@/components/FAQAccordion'
 import { isBetaActive } from '@/lib/beta'
 import Logo from '@/components/Logo'
 import Script from 'next/script'
@@ -404,40 +405,7 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="space-y-8">
-            <div>
-              <h3 className="text-xl font-bold text-slate-900 mb-2">What is Sophi?</h3>
-              <QuickAnswer 
-                question="What is Sophi?"
-                answer="Sophi is an AI-powered CV builder for Pakistani professionals. You upload your existing CV, and our AI rewrites it into a fully ATS-optimized career document including a professional summary, achievement-based bullets, LinkedIn optimizer, cover letter, and gap analysis — all for 1500 PKR." 
-              />
-              <p className="text-sm text-slate-600">
-                Built specifically for the Pakistani job market, Sophi ensures your application passes digital screening and reaches human eyes. Our customized AI models target over 12 sectors with specifically crafted keywords and formatting.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-xl font-bold text-slate-900 mb-2">What is an ATS score and why does it matter?</h3>
-              <QuickAnswer 
-                question="What is an ATS score and why does it matter?"
-                answer="An ATS (Applicant Tracking System) score measures how well your CV passes automated screening software that 98% of large companies use. A low ATS score means your CV gets filtered out before any human sees it. Sophi scores your CV across 5 dimensions and rewrites it to maximize your score." 
-              />
-              <p className="text-sm text-slate-600">
-                ATS scoring algorithms read for keyword density, layout compliance, and semantic relevance. Without optimization, highly qualified candidates fail screening simply because of poor formatting.
-              </p>
-            </div>
-            
-            <div>
-              <h3 className="text-xl font-bold text-slate-900 mb-2">How do I pay for Sophi?</h3>
-              <QuickAnswer 
-                question="How do I pay for Sophi?"
-                answer="Sophi accepts payment securely via Safepay — Pakistan's trusted payment gateway. Bank transfer, cards, and mobile wallets supported." 
-              />
-              <p className="text-sm text-slate-600">
-                You can directly pay via our integrated checkout securely. Your account is activated instantly after the payment completes, providing you immediate access to your revamped career documents.
-              </p>
-            </div>
-          </div>
+          <FAQAccordion />
         </div>
       </section>
 

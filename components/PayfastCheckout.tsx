@@ -112,6 +112,13 @@ export default function PayfastCheckout({ email }: { email: string }) {
   if (step === 1) {
     return (
       <form onSubmit={handleValidate} className="space-y-4">
+        <div className="flex items-center justify-between p-2.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold">
+          <span className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+            🧪 PayFast Sandbox (Testing Mode Active)
+          </span>
+          <span className="text-[10px] bg-amber-100 text-amber-900 px-2 py-0.5 rounded font-mono">SANDBOX</span>
+        </div>
         <div className="grid gap-3 text-sm">
           <input required type="text" placeholder="Mobile (e.g. 92-345XXXXXX)" value={mobile} onChange={e => setMobile(e.target.value)} className="rounded-lg border border-slate-300 p-2.5 w-full outline-none focus:border-[#F7941D]" />
           <select required value={bankCode} onChange={e => setBankCode(e.target.value)} className="rounded-lg border border-slate-300 p-2.5 w-full bg-white outline-none focus:border-[#F7941D]">

@@ -73,7 +73,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
       />
       <Header />
       
-      <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <Link href="/blog" className="inline-flex items-center gap-2 text-sm font-bold text-primary hover:text-primary-800 transition-colors mb-8">
           <ArrowLeft className="w-4 h-4" /> Back to Blog
         </Link>

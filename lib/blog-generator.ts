@@ -35,22 +35,12 @@ Format the output strictly as a JSON object with the following keys:
 Do not include any markdown block wrappers like \`\`\`json around the output. Just return the raw JSON string.`;
 
   try {
-    let response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { temperature: 0.7 },
-        }),
-      }
-    );
+  const modelsToTry = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-flash-latest'];
 
-    if (!response.ok) {
-      console.warn(`⚠️ gemini-1.5-flash returned ${response.status}, retrying with gemini-2.0-flash...`);
-      response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+  for (const model of modelsToTry) {
+    try {
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -60,21 +50,22 @@ Do not include any markdown block wrappers like \`\`\`json around the output. Ju
           }),
         }
       );
-    }
 
-    if (!response.ok) {
-      const errText = await response.text();
-      console.error(`❌ Gemini API error: ${response.status} - ${errText}`);
-      return null;
+      if (response.ok) {
+        const data = await response.json();
+        let textOutput = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (textOutput) {
+          textOutput = textOutput.replace(/```json/gi, '').replace(/```/g, '').trim();
+          return JSON.parse(textOutput);
+        }
+      } else {
+        console.warn(`⚠️ Model ${model} returned status ${response.status}`);
+      }
+    } catch (err) {
+      console.warn(`⚠️ Error calling model ${model}:`, err);
     }
+  }
 
-    const data = await response.json();
-    let textOutput = data.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (textOutput) {
-      // Clean up markdown block wrappers and leading/trailing whitespace
-      textOutput = textOutput.replace(/```json/gi, '').replace(/```/g, '').trim();
-      return JSON.parse(textOutput);
-    }
     return null;
   } catch (error) {
     console.error('❌ Error communicating with Gemini API for blog generation:', error);

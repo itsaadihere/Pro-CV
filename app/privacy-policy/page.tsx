@@ -22,7 +22,7 @@ export default function PrivacyPolicyPage() {
           </p>
           <ul className="list-disc pl-6 space-y-2">
             <li>Provide, operate, and maintain our CV building service.</li>
-            <li>Process your transactions securely via our payment partners (e.g., PayFast).</li>
+            <li>Process your transactions securely via our payment partners (e.g., DirectPay).</li>
             <li>Analyze and improve our AI algorithms to generate better resumes.</li>
             <li>Communicate with you regarding updates, support, and marketing.</li>
           </ul>

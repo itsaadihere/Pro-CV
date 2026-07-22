@@ -7,6 +7,7 @@ import { CreditCard, ShieldCheck, Loader2, ArrowLeft, HelpCircle } from 'lucide-
 import Link from 'next/link'
 import toast from 'react-hot-toast'
 import { isBetaActive } from '@/lib/beta'
+import DirectPayCheckout from '@/components/DirectPayCheckout'
 import PayfastCheckout from '@/components/PayfastCheckout'
 
 export default function PaymentPage() {
@@ -14,6 +15,7 @@ export default function PaymentPage() {
   const supabase = getClientSupabase()
   const [loading, setLoading] = useState(true)
   const [email, setEmail] = useState('')
+  const [fullName, setFullName] = useState('')
   const [paying, setPaying] = useState(false)
 
   useEffect(() => {
@@ -29,6 +31,20 @@ export default function PaymentPage() {
         return
       }
       setEmail(session.user.email || '')
+      
+      // Fetch user profile for full name prefill
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('full_name')
+        .eq('id', session.user.id)
+        .single()
+        
+      if (profile?.full_name) {
+        setFullName(profile.full_name)
+      } else if (session.user.user_metadata?.full_name) {
+        setFullName(session.user.user_metadata.full_name)
+      }
+
       setLoading(false)
     }
 
@@ -67,6 +83,8 @@ export default function PaymentPage() {
       </div>
     )
   }
+
+  const activeGateway = process.env.NEXT_PUBLIC_ACTIVE_PAYMENT_GATEWAY || 'directpay'
 
   return (
     <div className="min-h-[calc(100vh-4rem)] bg-slate-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -129,7 +147,9 @@ export default function PaymentPage() {
 
           {/* Checkout Buttons */}
           <div className="mt-8 space-y-4">
-            {process.env.NEXT_PUBLIC_ACTIVE_PAYMENT_GATEWAY === 'payfast' ? (
+            {activeGateway === 'directpay' ? (
+              <DirectPayCheckout email={email} defaultName={fullName} />
+            ) : activeGateway === 'payfast' ? (
               <PayfastCheckout email={email} />
             ) : (
               <>

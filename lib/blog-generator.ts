@@ -21,7 +21,7 @@ IMPORTANT HEADING FORMATTING: All major section headers MUST be wrapped in prope
 6. Inline Image Keyword (1-2 words, e.g., "career,laptop" or "hiring,manager")
 
 Crucially, in the exact middle of your HTML content, you MUST embed an inline image using this exact format:
-<img src="https://loremflickr.com/800/400/[Inline Image Keyword]?random=1" alt="Relevant career illustration" class="w-full h-auto rounded-3xl my-10 shadow-sm object-cover" />
+<img src="https://picsum.photos/seed/[Inline Image Keyword]/800/400" alt="Relevant career illustration" class="w-full h-auto rounded-3xl my-10 shadow-sm object-cover" />
 
 Format the output strictly as a JSON object with the following keys:
 {

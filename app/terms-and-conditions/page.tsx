@@ -28,7 +28,7 @@ export default function TermsAndConditionsPage() {
 
           <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">4. Payment and Pricing</h2>
           <p>
-            Our service is offered at a single subscription/package rate of 1500 PKR. All payments are securely processed through our authorized payment gateways (including PayFast). Prices are subject to change, but you will only be charged the price explicitly stated at checkout.
+            Our service is offered at a single subscription/package rate of 1500 PKR. All payments are securely processed through our authorized payment gateways (including DirectPay). Prices are subject to change, but you will only be charged the price explicitly stated at checkout.
           </p>
 
           <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">5. Intellectual Property</h2>

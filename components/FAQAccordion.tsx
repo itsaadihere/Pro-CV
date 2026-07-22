@@ -23,7 +23,7 @@ const faqs: FAQItem[] = [
   {
     id: 'pricing-payment',
     question: 'How much does it cost and what payment methods are supported?',
-    answer: 'Sophi costs a single flat rate of 1,500 PKR with no hidden fees or monthly subscriptions. We support secure local payments in Pakistan via PayFast and Safepay, including Bank Transfers, Debit/Credit cards, JazzCash, and EasyPaisa.'
+    answer: 'Sophi costs a single flat rate of 1,500 PKR with no hidden fees or monthly subscriptions. We support secure local payments in Pakistan via DirectPay, including Bank Transfers, Debit/Credit cards, JazzCash, and EasyPaisa.'
   },
   {
     id: 'delivery-time',

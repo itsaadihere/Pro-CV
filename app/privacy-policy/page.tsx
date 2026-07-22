@@ -40,7 +40,7 @@ export default function PrivacyPolicyPage() {
           <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">5. Contact Us</h2>
           <p>
             If you have any questions about this Privacy Policy, please contact us at:<br /><br />
-            <strong>Address:</strong> NC-24, Deh Dih, Dr. Salim Habib Road, in the Korangi Creek area of Karachi, Pakistan<br />
+            <strong>Address:</strong> A-23, Saima Luxury Homes, Bagh e Korangi, Karachi, Pakistan<br />
             <strong>Phone:</strong> +92 336 2500 595<br />
             <strong>Email:</strong> support@joinsophi.com
           </p>

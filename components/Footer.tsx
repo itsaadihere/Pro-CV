@@ -38,8 +38,8 @@ export default function Footer() {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-white">Contact Us</h3>
             <address className="not-italic text-sm space-y-2 text-slate-400">
-              <p>NC-24, Deh Dih, Dr. Salim Habib Road,</p>
-              <p>Korangi Creek Area, Karachi, Pakistan</p>
+              <p>A-23, Saima Luxury Homes,</p>
+              <p>Bagh e Korangi, Karachi, Pakistan</p>
               <p className="pt-2">
                 <a href="tel:+923362500595" className="hover:text-primary transition-colors">+92 336 2500 595</a>
               </p>

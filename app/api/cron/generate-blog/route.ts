@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { generateBlogPostWithGemini } from '@/lib/blog-generator';
 import { createClient } from '@supabase/supabase-js';
 import { notifyIndexNow } from '@/lib/indexNow';
@@ -54,6 +55,15 @@ export async function GET(request: Request) {
     if (error) {
       console.error('Error inserting blog post:', error);
       return NextResponse.json({ error: 'Database insert failed' }, { status: 500 });
+    }
+
+    // Purge Next.js cache so the new post appears immediately on /blog
+    try {
+      revalidatePath('/blog');
+      revalidatePath(`/blog/${slug}`);
+      revalidatePath('/sitemap.xml');
+    } catch (e) {
+      console.error('Revalidate error:', e);
     }
 
     // Notify Bing via IndexNow

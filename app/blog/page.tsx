@@ -3,8 +3,8 @@ import Header from '@/components/Header';
 import { createClient } from '@supabase/supabase-js';
 import Link from 'next/link';
 
-// Revalidate this page every hour
-export const revalidate = 3600;
+// Force dynamic rendering so new blogs appear immediately
+export const dynamic = 'force-dynamic';
 
 export default async function BlogIndexPage() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;

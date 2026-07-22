@@ -73,17 +73,17 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
       />
       <Header />
       
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <main className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <Link href="/blog" className="inline-flex items-center gap-2 text-sm font-bold text-primary hover:text-primary-800 transition-colors mb-8">
           <ArrowLeft className="w-4 h-4" /> Back to Blog
         </Link>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mt-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-4">
           {/* Main Content */}
           <div className="lg:col-span-8">
             <article className="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
               {post.featured_image && (
-                <img src={post.featured_image} alt={post.title} className="w-full h-64 md:h-96 object-cover" />
+                <img src={post.featured_image} alt={post.title} className="w-full h-72 md:h-[450px] object-cover" />
               )}
               
               <div className="p-8 md:p-12">

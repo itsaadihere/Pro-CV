@@ -46,12 +46,55 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
+function formatBlogHeadings(htmlContent: string) {
+  if (!htmlContent) return '';
+  let content = htmlContent;
+
+  // 1. Transform Quick Answer blocks into stylized golden callout cards
+  content = content.replace(
+    /(?:<p>)?(?:<strong>)?Quick Answer:(?:<\/strong>)?\s*([\s\S]*?)(?:<\/p>|$)/gi,
+    '<div class="my-8 p-6 rounded-2xl bg-amber-50/90 border border-amber-200 shadow-sm text-slate-800"><div class="flex items-center gap-2 mb-2"><span class="font-black text-amber-900 bg-amber-200/80 px-3 py-1 rounded-lg text-xs tracking-wider uppercase flex items-center gap-1">⚡ Quick Answer</span></div><div class="text-slate-800 font-semibold text-base leading-relaxed">$1</div></div>'
+  );
+
+  // 2. Transform numbered heading paragraphs like <p>1. Master the Art...</p> into prominent <h2> tags
+  content = content.replace(
+    /<p>(?:<strong>)?(\d+\.\s+[^<]+)(?:<\/strong>)?<\/p>/gi,
+    '<h2 class="text-2xl md:text-3xl font-black text-slate-900 mt-12 mb-5 pb-3 border-b border-slate-200">$1</h2>'
+  );
+
+  // 3. Transform unnumbered heading paragraphs like <p>Stop Guessing and Start Optimizing</p> into <h2>
+  content = content.replace(
+    /<p>([A-Z][A-Za-z0-9\s,':\-\?]{5,80})<\/p>/g,
+    (match, p1) => {
+      if (!p1.endsWith('.') && p1.length < 80 && !p1.toLowerCase().startsWith('quick answer')) {
+        return `<h2 class="text-2xl md:text-3xl font-black text-slate-900 mt-12 mb-5 pb-3 border-b border-slate-200">${p1}</h2>`;
+      }
+      return match;
+    }
+  );
+
+  // 4. Style existing <h2> and <h3> tags for strong visual hierarchy
+  content = content.replace(
+    /<h2>/gi,
+    '<h2 class="text-2xl md:text-3xl font-black text-slate-900 mt-12 mb-5 pb-3 border-b border-slate-200">'
+  );
+
+  content = content.replace(
+    /<h3>/gi,
+    '<h3 class="text-xl md:text-2xl font-bold text-slate-900 mt-8 mb-4">'
+  );
+
+  return content;
+}
+
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
   const post = await getPost(params.slug);
 
   if (!post) {
     notFound();
   }
+
+  const formattedContent = formatBlogHeadings(post.content);
 
   const schema = blogPostSchema({
     title: post.title,
@@ -115,8 +158,8 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                 </div>
 
                 <div 
-                  className="prose prose-lg prose-slate max-w-none prose-headings:font-bold prose-headings:text-slate-900 prose-h2:text-3xl prose-h3:text-2xl prose-a:text-primary prose-a:font-semibold prose-a:no-underline hover:prose-a:underline prose-img:rounded-2xl prose-img:shadow-sm"
-                  dangerouslySetInnerHTML={{ __html: post.content }}
+                  className="prose prose-lg prose-slate max-w-none prose-headings:font-black prose-headings:text-slate-900 prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-5 prose-h3:text-2xl prose-h3:mt-8 prose-h3:mb-4 prose-a:text-primary prose-a:font-semibold prose-a:no-underline hover:prose-a:underline prose-img:rounded-2xl prose-img:shadow-sm"
+                  dangerouslySetInnerHTML={{ __html: formattedContent }}
                 />
 
                 <div className="mt-16 pt-8 border-t border-slate-100">

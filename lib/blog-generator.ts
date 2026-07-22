@@ -15,7 +15,8 @@ Include the following sections:
 1. Catchy Title
 2. Meta Description (max 155 chars)
 3. Primary Keyword
-4. Content (Minimum 3000-4000 words). This must be a massively detailed guide. Use H2, H3, and H4 tags. Add a "Quick Answer" 40-word summary after each H2. Include a TL;DR at the top. Naturally weave in LSI keywords. End with a strong CTA to use Sophi.
+4. Content (Minimum 3000-4000 words). This must be a massively detailed guide. 
+IMPORTANT HEADING FORMATTING: All major section headers MUST be wrapped in proper semantic <h2> tags (e.g. <h2>1. Master the Art of Keyword Density</h2>). Subsections must use <h3> tags. Never place section titles in plain paragraph <p> or <strong> tags. Add a "Quick Answer: ..." 40-word summary after each H2 section. Include a TL;DR at the top. Naturally weave in LSI keywords. End with a strong CTA to use Sophi.
 5. Featured Image Keyword (1-2 words, e.g., "office,resume" or "interview,success")
 6. Inline Image Keyword (1-2 words, e.g., "career,laptop" or "hiring,manager")
 

@@ -39,6 +39,7 @@ import toast from 'react-hot-toast'
 import Header from '@/components/Header'
 import ATSScoreCard from '@/components/ATSScoreCard'
 import CVPreview from '@/components/CVPreview'
+import JobRecommendationsWidget from '@/components/JobRecommendationsWidget'
 
 type TabType = 'ats' | 'cv' | 'linkedin' | 'cover' | 'gap'
 
@@ -653,6 +654,16 @@ export default function ResultPage() {
             </div>
           )}
         </div>
+
+        {/* Smart Job Recommendations Widget */}
+        <JobRecommendationsWidget
+          userId={jobData.user_id}
+          cvKeywords={[
+            ...(jobData.gap_analysis?.missingKeywords || []),
+            ...(jobData.linkedin_optimizer?.skills || []),
+            ...(jobData.target_industry ? [jobData.target_industry] : [])
+          ]}
+        />
 
         {/* Beta Feedback Widget */}
         {isBetaActive() && (

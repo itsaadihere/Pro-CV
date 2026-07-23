@@ -87,6 +87,15 @@ export default function Header() {
           <div className="flex items-center gap-4">
             {user ? (
               <>
+                <a
+                  href="https://career.joinsophi.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hidden text-sm font-bold text-slate-650 hover:text-blue-600 transition-colors md:flex items-center gap-1"
+                >
+                  💼 Browse Jobs
+                </a>
+
                 <Link
                   href="/dashboard"
                   className={`hidden text-sm font-bold transition-colors md:block ${

@@ -7,6 +7,8 @@ import Footer from "@/components/Footer";
 import { GoogleAnalytics } from '@next/third-parties/google';
 import Script from 'next/script';
 import { organizationSchema } from '@/lib/schema';
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -94,6 +96,8 @@ export default function RootLayout({
         {children}
         <Footer />
         <GoogleAnalytics gaId="G-8YEPSJ9MP3" />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
